@@ -18,6 +18,7 @@ class TaskItTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        expect(4 == 4).to(beTrue())
     }
     
     func testPerformanceExample() {
