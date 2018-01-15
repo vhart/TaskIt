@@ -11,4 +11,3 @@ language: objective-c
 # - pod install --project-directory=Example
 script:
 - set -o pipefail && xcodebuild clean test -enableCodeCoverage YES -workspace TaskIt.xcworkspace -scheme TaskIt -destination "platform=iOS Simulator,name=iPhone 7,OS=11.2" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO | xcpretty
-- pod lib lint
