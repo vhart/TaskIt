@@ -1,12 +1,6 @@
-//
-//  TaskItTests.swift
-//  TaskItTests
-//
-//  Created by Varinda Hart on 1/15/18.
-//  Copyright © 2018 vhart. All rights reserved.
-//
-
 import XCTest
+import Quick
+import Nimble
 @testable import TaskIt
 
 class TaskItTests: XCTestCase {
