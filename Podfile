@@ -5,6 +5,8 @@ target 'TaskIt' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   pod 'RxSwift',    '~> 4.0'
+  pod 'Cartography', '~> 3.0.1'
+  pod 'RealmSwift'
   # Pods for TaskIt
 
   target 'TaskItTests' do
@@ -12,6 +14,7 @@ target 'TaskIt' do
     pod 'RxSwift',    '~> 4.0'
     pod 'Quick', '~> 1.2.0'
     pod 'Nimble', '~> 7.0.2' 
+    pod 'RealmSwift'
     # Pods for testing
   end
 
