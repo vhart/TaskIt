@@ -1,9 +1,376 @@
-//
-//  ProjectCreationViewController.swift
-//  TaskIt
-//
-//  Created by Varinda Hart on 2/22/18.
-//  Copyright © 2018 vhart. All rights reserved.
-//
+import UIKit
+import RealmSwift
+import RxSwift
 
-import Foundation
+class ProjectCreationViewController: UIViewController {
+
+    class func fromStoryboard() -> ProjectCreationViewController {
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ProjectCreationViewController") as! ProjectCreationViewController
+        vc.viewModel = ViewModel()
+        return vc
+    }
+
+    var viewModel: ViewModel!
+    let disposeBag = DisposeBag()
+
+    @IBOutlet weak var projectNameTextField: UITextField!
+
+    @IBOutlet weak var tableView: UITableView!
+
+    @IBOutlet weak var finishButton: UIButton!
+
+    lazy var editBarButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editButtonTapped(_:)))
+        return button
+    }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        viewModel = ViewModel()
+        tableView.delegate = self
+        tableView.dataSource = self
+        projectNameTextField.delegate = self
+
+        bindUiToViewModel()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let indexPath = tableView.indexPathForSelectedRow {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        viewModel.view(.didAppear)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        viewModel.view(.didDisappear)
+    }
+
+    @IBAction func finishButtonTapped(_ sender: Any) {
+        viewModel.finalize()
+        navigationController?.popViewController(animated: true)
+    }
+
+    @objc func editButtonTapped(_ sender: Any) {
+        viewModel.editButtonTapped()
+    }
+
+    func bindUiToViewModel() {
+        viewModel.insert
+            .observeOn(MainScheduler.instance)
+            .subscribeNext { [weak self] path in
+            self?.tableView.insertRows(at: [path], with: .automatic)
+        }.disposed(by: disposeBag)
+
+        viewModel.reload
+            .observeOn(MainScheduler.instance)
+            .subscribeNext { [weak self] path in
+                self?.tableView.reloadRows(at: [path], with: .automatic)
+        }.disposed(by: disposeBag)
+
+        viewModel.projectName
+            .observeOn(MainScheduler.instance)
+            .subscribeNext { [weak self] name in
+                if let name = name {
+                    self?.navigationItem.title = name
+                } else {
+                    self?.navigationItem.title = "Create Project"
+                }
+        }.disposed(by: disposeBag)
+
+        viewModel.showEditingOption
+            .distinctUntilChanged()
+            .observeOn(MainScheduler.instance)
+            .subscribeNext { [weak self] canShowEditing in
+                if canShowEditing {
+                    self?.addEditButton()
+                } else {
+                    self?.removeEditButton()
+                }
+        }.disposed(by: disposeBag)
+
+        viewModel.isEditing
+            .distinctUntilChanged()
+            .observeOn(MainScheduler.instance)
+            .subscribeNext { [weak self] isEditing in
+                self?.tableView.isEditing = isEditing
+                self?.editBarButton.title = isEditing ? "Done" : "Edit"
+        }.disposed(by: disposeBag)
+
+        viewModel.finishEnabled
+            .distinctUntilChanged()
+            .observeOn(MainScheduler.instance)
+            .subscribeNext { [weak self] isEnabled in
+                self?.finishButton.backgroundColor = isEnabled ? .ocean : .fog
+                self?.finishButton.isEnabled = isEnabled
+        }.disposed(by: disposeBag)
+    }
+
+    func addEditButton() {
+        navigationItem.rightBarButtonItem = editBarButton
+    }
+
+    func removeEditButton() {
+        navigationItem.rightBarButtonItem = nil
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let id = segue.identifier else { return }
+        switch id {
+        case "TaskCreationSegue":
+            let vc = segue.destination as! TaskCreationViewController
+            vc.mode = .create
+            vc.onComplete = { [weak self] task in
+                self?.viewModel.updateWith(task: task)
+            }
+        case "TaskEditingSegue":
+            let vc = segue.destination as! TaskCreationViewController
+            guard let index = tableView.indexPathForSelectedRow?.row
+                else { fatalError("invalid transition to editing") }
+            vc.mode = .update(viewModel.tasks[index])
+            vc.onComplete = { [weak self] task in
+                self?.viewModel.updateWith(task: task)
+            }
+        default: break
+        }
+    }
+}
+
+extension ProjectCreationViewController: UITableViewDelegate,
+UITableViewDataSource {
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return viewModel.numberOfSections
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.tasks.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TaskTableViewCell",
+                                                 for: indexPath) as! TaskTableViewCell
+        cell.viewModel = TaskTableViewCellViewModel(task: viewModel.tasks[indexPath.row])
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+
+        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { [weak self] (action, indexPath) in
+            self?.viewModel.removeTask(index: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+
+        return [delete]
+    }
+
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        return .none
+    }
+
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let movedObject = viewModel.tasks[sourceIndexPath.row]
+        viewModel.tasks.remove(at: sourceIndexPath.row)
+        viewModel.tasks.insert(movedObject, at: destinationIndexPath.row)
+    }
+}
+
+extension ProjectCreationViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        viewModel.updateProjectName(textField.text)
+        textField.resignFirstResponder()
+        return true
+    }
+}
+
+protocol ProjectCreationViewModel {}
+extension ProjectCreationViewController {
+    struct ProjectValidity: OptionSet {
+        let rawValue: Int
+        init(rawValue: Int) { self.rawValue = rawValue }
+
+        static let validTitle = ProjectValidity(rawValue: 1 << 0)
+        static let validTaskCount = ProjectValidity(rawValue: 1 << 1)
+        static let fullyValid: ProjectValidity = [.validTitle, .validTaskCount]
+    }
+
+    class ViewModel: ProjectCreationViewModel {
+        private let numberOfRowsSubject = Variable<Int>(0)
+        private var nameSubject = Variable<String?>(nil)
+        private let insertSubject = PublishSubject<IndexPath>()
+        private let reloadSubject = PublishSubject<IndexPath>()
+        private let editingSubject = Variable<Bool>(false)
+        private let showEditingSubject = Variable<Bool>(false)
+        private let finishEnabledSubject = Variable<Bool>(false)
+        private var shouldDelayUIUpdates = false {
+            didSet {
+                if !shouldDelayUIUpdates {
+                    flushUpdates()
+                }
+            }
+        }
+        private var delayedUIUpdates = [() -> Void]()
+        private var validity: ProjectValidity = [] {
+            didSet {
+                finishEnabledSubject.value = validity.contains(.fullyValid)
+            }
+        }
+
+        var insert: Observable<IndexPath> { return insertSubject.asObservable() }
+        var reload: Observable<IndexPath> { return reloadSubject.asObservable() }
+        var projectName: Observable<String?> { return nameSubject.asObservable() }
+        var isEditing: Observable<Bool> { return editingSubject.asObservable() }
+        var showEditingOption: Observable<Bool> {
+            return showEditingSubject.asObservable()
+        }
+        var finishEnabled: Observable<Bool> {
+            return finishEnabledSubject.asObservable()
+        }
+
+        let numberOfSections = 1
+        var tasks = [Task]() {
+            didSet {
+                showEditingSubject.value = !tasks.isEmpty
+                if tasks.isEmpty {
+                    validity.remove(.validTaskCount)
+                } else {
+                    validity.insert(.validTaskCount)
+                }
+            }
+        }
+
+        init() {
+            let t1 = Task()
+            t1.estimatedDuration = 90
+            t1.title = "T1"
+            t1.taskDetails = ""
+
+            let t2 = Task()
+            t2.estimatedDuration = 30
+            t2.title = "T2"
+            t2.taskDetails = "blue lagoon is cool for you"
+
+            let t4 = Task()
+            t4.estimatedDuration = 120
+            t4.title = "T4"
+            t4.taskDetails = "learn salsa"
+
+            let t3 = Task()
+            t3.estimatedDuration = 150
+            t3.title = "T3"
+            t3.taskDetails = "potato salad"
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.updateWith(task: t1)
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.updateWith(task: t2)
+                self.updateWith(task: t4)
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                t1.title = "T1 updated"
+                t1.taskDetails = "Should update this label"
+                self.updateWith(task: t1)
+                self.updateWith(task: t3)
+            }
+        }
+
+        func view(_ state: ViewControllerLifeCycle) {
+            switch state {
+            case .didDisappear: shouldDelayUIUpdates = true
+            case .didAppear: shouldDelayUIUpdates = false
+            default: break
+            }
+        }
+
+        func updateWith(task: Task) {
+            if tasks.contains(task) {
+                let index = tasks.index(of: task)!
+                let path = IndexPath(row: index, section: 0)
+                reload(indexPath: path)
+            } else {
+                tasks.append(task)
+                insert(indexPath: IndexPath(row: tasks.count - 1, section: 0))
+            }
+        }
+
+        func removeTask(index: Int) {
+            tasks.remove(at: index)
+        }
+
+        func updateProjectName(_ name: String?) {
+            let nonWhiteSpace = CharacterSet.whitespacesAndNewlines.inverted
+            if name?.rangeOfCharacter(from: nonWhiteSpace) == nil {
+                nameSubject.value = nil
+                validity.remove(.validTitle)
+                return
+            } else {
+                nameSubject.value = name
+                validity.insert(.validTitle)
+            }
+        }
+
+        func editButtonTapped() {
+            editingSubject.value = !editingSubject.value
+        }
+
+        func finalize() {
+            let project = makeProject()
+            let realm = RealmFactory.get(.main)
+            try! realm.write {
+                realm.add(project)
+            }
+        }
+
+        private func makeProject() -> Project {
+            guard validity.contains(.fullyValid)
+                else { fatalError("Validation has failed") }
+            let project = Project()
+            project.tasks.append(objectsIn: tasks)
+            project.name = nameSubject.value!
+            return project
+        }
+
+        private func reload(indexPath: IndexPath) {
+            guard !shouldDelayUIUpdates else {
+                let update: () -> Void = { [weak self] in
+                    self?.reloadSubject.onNext(indexPath)
+                }
+                delayedUIUpdates.append(update)
+                return
+            }
+
+            reloadSubject.onNext(indexPath)
+        }
+
+        private func insert(indexPath: IndexPath) {
+            guard !shouldDelayUIUpdates else {
+                let update: () -> Void = { [weak self] in
+                    self?.insertSubject.onNext(indexPath)
+                }
+                delayedUIUpdates.append(update)
+                return
+            }
+
+            insertSubject.onNext(indexPath)
+        }
+
+        private func flushUpdates() {
+            for update in delayedUIUpdates {
+                update()
+            }
+            delayedUIUpdates = []
+        }
+    }
+}

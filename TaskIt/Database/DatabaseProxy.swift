@@ -1,9 +1,36 @@
-//
-//  DatabaseProxy.swift
-//  TaskIt
-//
-//  Created by Varinda Hart on 2/22/18.
-//  Copyright © 2018 vhart. All rights reserved.
-//
+import RealmSwift
 
-import Foundation
+protocol DatabaseProxy {
+    init(instance: RealmInstance)
+    func write(_ obj: Object)
+    func delete(_ obj: Object)
+    func objects<Element: Object>(_ type: Element.Type) -> Results<Element>
+}
+
+class RealmProxy: DatabaseProxy {
+    private let realm: Realm
+
+    required init(instance: RealmInstance) {
+        self.realm = RealmFactory.get(instance)
+    }
+
+    func write(_ obj: Object) {
+        try! realm.write {
+            realm.add(obj)
+        }
+    }
+
+    func delete(_ obj: Object) {
+        try! realm.write {
+            realm.delete(obj)
+        }
+    }
+
+    func write(action: () -> Void) {
+        try! realm.write(action)
+    }
+
+    func objects<Element: Object>(_ type: Element.Type) -> Results<Element> {
+        return realm.objects(type)
+    }
+}

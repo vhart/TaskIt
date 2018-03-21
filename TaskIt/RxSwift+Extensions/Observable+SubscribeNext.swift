@@ -1,9 +1,10 @@
-//
-//  Observable+SubscribeNext.swift
-//  TaskIt
-//
-//  Created by Varinda Hart on 2/19/18.
-//  Copyright © 2018 vhart. All rights reserved.
-//
+import RxSwift
 
-import Foundation
+extension Observable {
+    func subscribeNext(onNext: @escaping (Element) -> Void) -> Disposable {
+        return self.subscribe(onNext: onNext,
+                              onError: nil,
+                              onCompleted: nil,
+                              onDisposed: nil)
+    }
+}
