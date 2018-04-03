@@ -22,6 +22,7 @@ class SprintSetUpIndicatorView: UIView {
     init() {
         super.init(frame: CGRect.zero)
         layoutViews()
+        addButtonAction()
 
         viewModel.title
             .asObservable()
@@ -42,13 +43,15 @@ class SprintSetUpIndicatorView: UIView {
         fatalError()
     }
 
+    private func addButtonAction() {
+        setupButton.addTarget(self,
+                              action: #selector(didTapButton),
+                              for: .touchUpInside)
+    }
+
     private func layoutViews() {
         addSubview(setupButton)
         NSLayoutConstraint.activate([
-//            setupButton.topAnchor.constraint(equalTo: topAnchor),
-//            setupButton.bottomAnchor.constraint(equalTo: bottomAnchor),
-//            setupButton.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            setupButton.trailingAnchor.constraint(equalTo: trailingAnchor),
             setupButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             setupButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             setupButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.5),

@@ -1,9 +1,7 @@
-//
-//  ProjectOperations.swift
-//  TaskIt
-//
-//  Created by Varinda Hart on 3/4/18.
-//  Copyright © 2018 vhart. All rights reserved.
-//
+public protocol ProjectOperations {
+    func replace(range: ClosedRange<Int>, with: [Task])
+    func deleteTask(at: Int)
+    func moveTask(from: Int, to: Int)
+}
 
-import Foundation
+

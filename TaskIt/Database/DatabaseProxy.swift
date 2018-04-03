@@ -3,6 +3,7 @@ import RealmSwift
 protocol DatabaseProxy {
     init(instance: RealmInstance)
     func write(_ obj: Object)
+    func write(action: () -> Void)
     func delete(_ obj: Object)
     func objects<Element: Object>(_ type: Element.Type) -> Results<Element>
 }

@@ -54,6 +54,9 @@ class DashboardDetailViewController: UIViewController {
         if viewModel.shouldOverlayWithSprintStart {
             sprintSetUpView.viewModel.setHidden(false)
             sprintSetUpView.viewModel.setTitle("Set Up Week X")
+            sprintSetUpView.onButtonTapped = { [weak self] in
+                self?.showSprintSetUp()
+            }
         }
     }
 
@@ -97,6 +100,11 @@ class DashboardDetailViewController: UIViewController {
             sprintSetUpView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
             sprintSetUpView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor)
             ])
+    }
+
+    private func showSprintSetUp() {
+        let vc = viewModel.sprintSetUpViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -163,9 +171,10 @@ extension DashboardDetailViewController {
             if let project = realm.objects(Project.self)
                 .filter("state != \(ProjectState.finished.rawValue)")
                 .last {
-//                fatalError("view cannot be presented without a project") }
             self.project = project
             } else {
+                fatalError("view cannot be presented without a project") 
+
                 self.project = Project()
                 self.project.name = "Dummy Project"
 
@@ -201,6 +210,10 @@ extension DashboardDetailViewController {
 
         func taskForIndex(_ index: Int) -> Task? {
             return currentSprint?.tasks[index]
+        }
+
+        func sprintSetUpViewController() -> UIViewController {
+            return SprintSetUpViewController.fromStoryboard(with: project)
         }
     }
 }

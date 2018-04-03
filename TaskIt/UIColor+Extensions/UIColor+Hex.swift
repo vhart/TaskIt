@@ -36,6 +36,7 @@ extension UIColor {
     static let plum      = UIColor(hexString: "5c258d")!
     static let fog       = UIColor(hexString: "ebedee")!
     static let ocean     = UIColor(hexString: "219DFF")!
+    static let limerick  = UIColor(hexString: "a2c115")!
 }
 
 extension CGColor {

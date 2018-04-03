@@ -26,11 +26,6 @@ class TapRecognizingView: UIView {
     }
 }
 
-//class TastStatesContainerView: UIView {
-//    let leftButton:
-//}
-
-
 class TaskStateButtonView: UIView {
 
     let taskState: TaskState
@@ -78,8 +73,4 @@ class TaskStateButtonView: UIView {
             label.trailingAnchor.constraint(equalTo: trailingAnchor)
             ])
     }
-
 }
-
-
-

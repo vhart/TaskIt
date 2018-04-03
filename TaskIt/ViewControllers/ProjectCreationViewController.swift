@@ -182,13 +182,20 @@ UITableViewDataSource {
         viewModel.tasks.remove(at: sourceIndexPath.row)
         viewModel.tasks.insert(movedObject, at: destinationIndexPath.row)
     }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60.0
+    }
 }
 
 extension ProjectCreationViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        viewModel.updateProjectName(textField.text)
         textField.resignFirstResponder()
         return true
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        viewModel.updateProjectName(textField.text)
     }
 }
 
@@ -258,11 +265,13 @@ extension ProjectCreationViewController {
             t2.estimatedDuration = 30
             t2.title = "T2"
             t2.taskDetails = "blue lagoon is cool for you"
+            t2.state = .inProgress
 
             let t4 = Task()
             t4.estimatedDuration = 120
             t4.title = "T4"
             t4.taskDetails = "learn salsa"
+            t4.state = .finished
 
             let t3 = Task()
             t3.estimatedDuration = 150
