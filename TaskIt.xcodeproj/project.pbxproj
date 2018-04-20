@@ -20,6 +20,8 @@
 		D5510F4320719ABE00682E62 /* TaskStateShuffleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5510F4220719ABE00682E62 /* TaskStateShuffleView.swift */; };
 		D5510F452071A89900682E62 /* AnimationConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5510F442071A89900682E62 /* AnimationConstraints.swift */; };
 		D5510F472071BD9E00682E62 /* TaskUpdateViewController+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5510F462071BD9E00682E62 /* TaskUpdateViewController+ViewModel.swift */; };
+		D56443C720868C560067DD23 /* AllTasksManagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56443C620868C560067DD23 /* AllTasksManagingViewController.swift */; };
+		D56443C92086A10B0067DD23 /* TasksHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56443C82086A10B0067DD23 /* TasksHeaderView.swift */; };
 		D566DE99200C6EF500A8DDA0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D566DE98200C6EF500A8DDA0 /* AppDelegate.swift */; };
 		D566DE9B200C6EF500A8DDA0 /* DashboardBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D566DE9A200C6EF500A8DDA0 /* DashboardBaseViewController.swift */; };
 		D566DE9E200C6EF500A8DDA0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D566DE9C200C6EF500A8DDA0 /* Main.storyboard */; };
@@ -31,13 +33,14 @@
 		D5AC2F8F204C64D50063688D /* SprintSetUpIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AC2F8E204C64D50063688D /* SprintSetUpIndicatorView.swift */; };
 		D5AF0541203EFDBF009BBF6D /* ProjectCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AF0540203EFDBF009BBF6D /* ProjectCreationViewController.swift */; };
 		D5C5F9A8205EDF31008F16C8 /* SprintSetUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C5F9A7205EDF31008F16C8 /* SprintSetUpViewController.swift */; };
-		D5C72744206347DB0018567A /* TableViewHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C72743206347DB0018567A /* TableViewHeaders.swift */; };
 		D5E20E172068045B004ED500 /* TaskUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E20E162068045B004ED500 /* TaskUpdateViewController.swift */; };
 		D5E20E1920681418004ED500 /* HourSelectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E20E1820681418004ED500 /* HourSelectionTableViewCell.swift */; };
 		D5E8749E203FA35700FEA751 /* DatabaseProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E8749D203FA35700FEA751 /* DatabaseProxy.swift */; };
 		D5E874A0203FB99C00FEA751 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E8749F203FB99C00FEA751 /* TaskTableViewCell.swift */; };
 		D5E874A2203FE79A00FEA751 /* TaskCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E874A1203FE79A00FEA751 /* TaskCreationViewController.swift */; };
 		D5E874A42043925700FEA751 /* ViewControllerLifeCycleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E874A32043925700FEA751 /* ViewControllerLifeCycleState.swift */; };
+		D5F179052077137B008DE8E8 /* Updates.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F179042077137B008DE8E8 /* Updates.swift */; };
+		D5F17907207853B3008DE8E8 /* UITableView+TableViewUpdates.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F17906207853B3008DE8E8 /* UITableView+TableViewUpdates.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +69,8 @@
 		D5510F4220719ABE00682E62 /* TaskStateShuffleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStateShuffleView.swift; sourceTree = "<group>"; };
 		D5510F442071A89900682E62 /* AnimationConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationConstraints.swift; sourceTree = "<group>"; };
 		D5510F462071BD9E00682E62 /* TaskUpdateViewController+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskUpdateViewController+ViewModel.swift"; sourceTree = "<group>"; };
+		D56443C620868C560067DD23 /* AllTasksManagingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTasksManagingViewController.swift; sourceTree = "<group>"; };
+		D56443C82086A10B0067DD23 /* TasksHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksHeaderView.swift; sourceTree = "<group>"; };
 		D566DE95200C6EF500A8DDA0 /* TaskIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D566DE98200C6EF500A8DDA0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D566DE9A200C6EF500A8DDA0 /* DashboardBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardBaseViewController.swift; sourceTree = "<group>"; };
@@ -81,13 +86,14 @@
 		D5AC2F8E204C64D50063688D /* SprintSetUpIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintSetUpIndicatorView.swift; sourceTree = "<group>"; };
 		D5AF0540203EFDBF009BBF6D /* ProjectCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCreationViewController.swift; sourceTree = "<group>"; };
 		D5C5F9A7205EDF31008F16C8 /* SprintSetUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintSetUpViewController.swift; sourceTree = "<group>"; };
-		D5C72743206347DB0018567A /* TableViewHeaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewHeaders.swift; sourceTree = "<group>"; };
 		D5E20E162068045B004ED500 /* TaskUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskUpdateViewController.swift; sourceTree = "<group>"; };
 		D5E20E1820681418004ED500 /* HourSelectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourSelectionTableViewCell.swift; sourceTree = "<group>"; };
 		D5E8749D203FA35700FEA751 /* DatabaseProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseProxy.swift; sourceTree = "<group>"; };
 		D5E8749F203FB99C00FEA751 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
 		D5E874A1203FE79A00FEA751 /* TaskCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCreationViewController.swift; sourceTree = "<group>"; };
 		D5E874A32043925700FEA751 /* ViewControllerLifeCycleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerLifeCycleState.swift; sourceTree = "<group>"; };
+		D5F179042077137B008DE8E8 /* Updates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Updates.swift; sourceTree = "<group>"; };
+		D5F17906207853B3008DE8E8 /* UITableView+TableViewUpdates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+TableViewUpdates.swift"; sourceTree = "<group>"; };
 		D9E6032FA2599969CAA6330C /* Pods-TaskIt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskIt.release.xcconfig"; path = "Pods/Target Support Files/Pods-TaskIt/Pods-TaskIt.release.xcconfig"; sourceTree = "<group>"; };
 		FA3FEDCE3F47D68D360B4869 /* Pods-TaskItTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskItTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TaskItTests/Pods-TaskItTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -173,6 +179,9 @@
 				D5E874A32043925700FEA751 /* ViewControllerLifeCycleState.swift */,
 				D5C5F9A7205EDF31008F16C8 /* SprintSetUpViewController.swift */,
 				D5884B2320731D7E00B5FDF5 /* SprintConfirmationViewController.swift */,
+				D56443C620868C560067DD23 /* AllTasksManagingViewController.swift */,
+				D5F179042077137B008DE8E8 /* Updates.swift */,
+				D5F17906207853B3008DE8E8 /* UITableView+TableViewUpdates.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -185,8 +194,8 @@
 				D5AC2F8E204C64D50063688D /* SprintSetUpIndicatorView.swift */,
 				D5185BB1205709B200140395 /* TapRecognizingView.swift */,
 				D5E20E1820681418004ED500 /* HourSelectionTableViewCell.swift */,
-				D5C72743206347DB0018567A /* TableViewHeaders.swift */,
 				D5510F4220719ABE00682E62 /* TaskStateShuffleView.swift */,
+				D56443C82086A10B0067DD23 /* TasksHeaderView.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -448,7 +457,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5E874A2203FE79A00FEA751 /* TaskCreationViewController.swift in Sources */,
-				D5C72744206347DB0018567A /* TableViewHeaders.swift in Sources */,
 				D5AC2F8D204C52540063688D /* ProjectOperations.swift in Sources */,
 				D5510F4320719ABE00682E62 /* TaskStateShuffleView.swift in Sources */,
 				D5AC2F8F204C64D50063688D /* SprintSetUpIndicatorView.swift in Sources */,
@@ -459,6 +467,7 @@
 				D5E20E172068045B004ED500 /* TaskUpdateViewController.swift in Sources */,
 				D51435C4203A3C3E00016DD3 /* Task.swift in Sources */,
 				D51D2C3E203B6D1400AA371C /* Observable+SubscribeNext.swift in Sources */,
+				D5F179052077137B008DE8E8 /* Updates.swift in Sources */,
 				D51D2C4A203BA7E900AA371C /* UIColor+Hex.swift in Sources */,
 				D5C5F9A8205EDF31008F16C8 /* SprintSetUpViewController.swift in Sources */,
 				D566DE9B200C6EF500A8DDA0 /* DashboardBaseViewController.swift in Sources */,
@@ -466,11 +475,14 @@
 				D5510F472071BD9E00682E62 /* TaskUpdateViewController+ViewModel.swift in Sources */,
 				D5185BB2205709B200140395 /* TapRecognizingView.swift in Sources */,
 				D51D2C41203B705900AA371C /* DispatchQueue+OnMain.swift in Sources */,
+				D5F17907207853B3008DE8E8 /* UITableView+TableViewUpdates.swift in Sources */,
 				D5510F452071A89900682E62 /* AnimationConstraints.swift in Sources */,
+				D56443C720868C560067DD23 /* AllTasksManagingViewController.swift in Sources */,
 				D51D2C3B203B6A6C00AA371C /* RealmFactory.swift in Sources */,
 				D5E874A0203FB99C00FEA751 /* TaskTableViewCell.swift in Sources */,
 				D566DE99200C6EF500A8DDA0 /* AppDelegate.swift in Sources */,
 				D51D2C47203BA78B00AA371C /* GraphView.swift in Sources */,
+				D56443C92086A10B0067DD23 /* TasksHeaderView.swift in Sources */,
 				D5E8749E203FA35700FEA751 /* DatabaseProxy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -628,6 +640,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3L76772298;
 				INFOPLIST_FILE = TaskIt/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vhart.TaskIt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -644,6 +657,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3L76772298;
 				INFOPLIST_FILE = TaskIt/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vhart.TaskIt;
 				PRODUCT_NAME = "$(TARGET_NAME)";

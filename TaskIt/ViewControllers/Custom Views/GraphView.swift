@@ -291,7 +291,7 @@ class SprintGraphView: UIView {
 
         finishedWidthConstraint = NSLayoutConstraint.changeMultiplier(finishedWidthConstraint, multiplier: finishedMultiplier)
 
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: 0.3) {
             self.layoutIfNeeded()
         }
     }

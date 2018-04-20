@@ -60,7 +60,7 @@ class SprintSetUpIndicatorView: UIView {
 
         layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         layer.cornerRadius = 5
-        backgroundColor = .fog
+        backgroundColor = UIColor.fog.withAlphaComponent(0.7)
     }
 
     @objc private func didTapButton() {
@@ -78,7 +78,7 @@ extension SprintSetUpIndicatorView {
         }
 
         func setHidden(_ isHidden: Bool) {
-            alpha.value = isHidden ? 0.0 : 0.7
+            alpha.value = isHidden ? 0.0 : 1.0
         }
     }
 }

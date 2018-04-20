@@ -2,6 +2,13 @@ import RxSwift
 
 class TaskUpdateViewController: UIViewController {
 
+    static func fromStoryboard(withMode mode: TaskEditingMode) -> TaskUpdateViewController {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "TaskUpdateViewController") as! TaskUpdateViewController
+        vc.mode = mode
+        return vc
+    }
+
     var mode: TaskEditingMode!
     var viewModel: ViewModel!
     var onComplete: ((Task) -> Void)?
@@ -67,11 +74,14 @@ class TaskUpdateViewController: UIViewController {
     @IBOutlet weak var completionButton: UIButton!
     @IBOutlet weak var hoursLabel: UILabel!
     @IBOutlet weak var hoursButton: UIButton!
+    @IBOutlet weak var titleNavItem: UINavigationItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.isUserInteractionEnabled = true
         viewModel = ViewModel(mode: mode)
 
+        setUpNavigationTitle()
         setUpPlaceholder()
         setUpShuffleView()
         setUpTapView()
@@ -85,6 +95,11 @@ class TaskUpdateViewController: UIViewController {
         bindUiToViewModel()
     }
 
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        view.endEditing(true)
+    }
+
     @IBAction func completionButtonTapped(_ sender: Any) {
         let updatedTask = viewModel.getTask()
         onComplete?(updatedTask)
@@ -96,6 +111,7 @@ class TaskUpdateViewController: UIViewController {
     }
 
     @IBAction func hoursButtonTapped(_ sender: UIButton) {
+        view.endEditing(true)
         sender.isEnabled = false
         viewModel.willUpdateHours()
     }
@@ -113,12 +129,12 @@ class TaskUpdateViewController: UIViewController {
             .observeOn(MainScheduler.instance)
             .subscribeNext { [weak self] index in
                 if index == 0 {
-                    self?.hoursLabel.text = "??.? hrs"
+                    self?.hoursLabel.text = "--.- hrs"
                     self?.hoursLabel.textColor = .red
                 } else {
-                    let hrs = index == 2 ? "hr" : "hrs"
-                    self?.hoursLabel.text = self?.viewModel.title(for: index) ?? "" + hrs
-                    self?.hoursLabel.textColor = .black
+                    let hrs = index == 2 ? " hr" : " hrs"
+                    self?.hoursLabel.text = (self?.viewModel.title(for: index) ?? "") + hrs
+                    self?.hoursLabel.textColor = .ocean
                 }
             }.disposed(by: disposeBag)
 
@@ -174,6 +190,13 @@ class TaskUpdateViewController: UIViewController {
         }
     }
 
+    private func setUpNavigationTitle() {
+        switch mode! {
+        case .create: titleNavItem.title = "Add Task"
+        case .update(_): titleNavItem.title = "Update Task"
+        }
+    }
+
     private func setUpPlaceholder() {
         taskDetailTextView.addSubview(placeholderLabel)
         NSLayoutConstraint.activate([
@@ -205,6 +228,7 @@ class TaskUpdateViewController: UIViewController {
         let bottom = hoursTableView.bottomAnchor.constraint(equalTo: hoursButton.topAnchor)
         let leading = hoursTableView.leadingAnchor.constraint(equalTo: hoursButton.leadingAnchor)
         let trailing = hoursTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8)
+
 
         tableViewAnimatableConstraints.constraints[.top] = top
         tableViewAnimatableConstraints.constraints[.bottom] = bottom
@@ -349,6 +373,7 @@ class TaskUpdateViewController: UIViewController {
 
 extension TaskUpdateViewController: ShuffleViewDelegate {
     func shuffleViewWillExpand(_ shuffleView: ShuffleView) {
+        view.endEditing(true)
         stateLabel.alpha = 0
     }
 
@@ -401,7 +426,11 @@ extension TaskUpdateViewController: UITableViewDelegate, UITableViewDataSource {
             reloads.append(IndexPath(row: previouslySelectedRow, section: 0))
         }
 
-        tableView.reloadRows(at: reloads, with: .automatic)
+        tableView.performBatchUpdates({
+            tableView.reloadRows(at: reloads, with: .automatic)
+        }) { [weak self] (_) in
+            self?.viewModel.endHoursEditing()
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -428,6 +457,14 @@ extension TaskUpdateViewController: UITextFieldDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         viewModel.didEditTitle(title: textField.text)
+        textField.layer.borderColor = UIColor.fog.cgColor
+        textField.layer.borderWidth = 1
+    }
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.layer.borderColor = UIColor.grass.cgColor
+        textField.layer.borderWidth = 2
+        textField.layer.cornerRadius = 5
     }
 }
 
@@ -440,9 +477,10 @@ extension TaskUpdateViewController: UITextViewDelegate {
         toolbar.barStyle = .default
         toolbar.isTranslucent = true
 
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(resignTextView))
 
-        toolbar.setItems([doneButton], animated: true)
+        toolbar.setItems([flexSpace, doneButton], animated: true)
         toolbar.sizeToFit()
 
         textView.inputAccessoryView = toolbar

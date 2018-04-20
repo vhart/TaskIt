@@ -51,7 +51,7 @@ class ShuffleView: UIView {
 
     lazy var rightButton: UIButton = {
         let b = UIButton()
-        b.backgroundColor = .limerick
+        b.backgroundColor = .spring
         b.translatesAutoresizingMaskIntoConstraints = false
         b.imageView?.contentMode = .scaleAspectFit
         let image = UIImage(named: "check")?.withRenderingMode(.alwaysTemplate)

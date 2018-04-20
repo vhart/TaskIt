@@ -123,13 +123,13 @@ class ProjectCreationViewController: UIViewController {
         guard let id = segue.identifier else { return }
         switch id {
         case "TaskCreationSegue":
-            let vc = segue.destination as! TaskCreationViewController
+            let vc = segue.destination as! TaskUpdateViewController
             vc.mode = .create
             vc.onComplete = { [weak self] task in
                 self?.viewModel.updateWith(task: task)
             }
         case "TaskEditingSegue":
-            let vc = segue.destination as! TaskCreationViewController
+            let vc = segue.destination as! TaskUpdateViewController
             guard let index = tableView.indexPathForSelectedRow?.row
                 else { fatalError("invalid transition to editing") }
             vc.mode = .update(viewModel.tasks[index])
@@ -196,6 +196,14 @@ extension ProjectCreationViewController: UITextFieldDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         viewModel.updateProjectName(textField.text)
+        textField.layer.borderColor = UIColor.fog.cgColor
+        textField.layer.borderWidth = 1
+    }
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.layer.borderColor = UIColor.ocean.cgColor
+        textField.layer.borderWidth = 2
+        textField.layer.cornerRadius = 5
     }
 }
 
@@ -261,37 +269,10 @@ extension ProjectCreationViewController {
             t1.title = "T1"
             t1.taskDetails = ""
 
-            let t2 = Task()
-            t2.estimatedDuration = 30
-            t2.title = "T2"
-            t2.taskDetails = "blue lagoon is cool for you"
-            t2.state = .inProgress
-
-            let t4 = Task()
-            t4.estimatedDuration = 120
-            t4.title = "T4"
-            t4.taskDetails = "learn salsa"
-            t4.state = .finished
-
-            let t3 = Task()
-            t3.estimatedDuration = 150
-            t3.title = "T3"
-            t3.taskDetails = "potato salad"
-
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.updateWith(task: t1)
-            }
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                self.updateWith(task: t2)
-                self.updateWith(task: t4)
-            }
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                 t1.title = "T1 updated"
                 t1.taskDetails = "Should update this label"
                 self.updateWith(task: t1)
-                self.updateWith(task: t3)
             }
         }
 

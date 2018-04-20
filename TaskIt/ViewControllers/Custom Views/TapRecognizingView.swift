@@ -26,6 +26,13 @@ class TapRecognizingView: UIView {
     }
 }
 
+class DismissalView: UIView {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        self.endEditing(true)
+    }
+}
+
 class TaskStateButtonView: UIView {
 
     let taskState: TaskState

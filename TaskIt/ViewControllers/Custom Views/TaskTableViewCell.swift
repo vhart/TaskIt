@@ -67,7 +67,7 @@ struct TaskTableViewCellViewModel {
             self.indicatorColor = .ocean
             self.gradient = CGColor.blues
         case .finished:
-            self.indicatorColor = .limerick
+            self.indicatorColor = .spring//.lemon//.gold//.green
             self.gradient = CGColor.greens
         }
     }

@@ -18,9 +18,9 @@ extension UIColor {
             let g = Double("0x" + hexString[positionR..<positionG]),
             let b = Double("0x" + hexString[positionG...]) else { return nil }
 
-        self.init(red: CGFloat(r / 255),
+        self.init(red:   CGFloat(r / 255),
                   green: CGFloat(g / 255),
-                  blue: CGFloat(b / 255),
+                  blue:  CGFloat(b / 255),
                   alpha: 1)
     }
 }
@@ -37,11 +37,16 @@ extension UIColor {
     static let fog       = UIColor(hexString: "ebedee")!
     static let ocean     = UIColor(hexString: "219DFF")!
     static let limerick  = UIColor(hexString: "a2c115")!
+    static let spring    = UIColor(hexString: "0fd850")!
+    static let kinda     = UIColor(hexString: "50cc7f")!
+    static let gold      = UIColor(hexString: "D4AF37")!
+    static let lemon     = UIColor(hexString: "f9f047")!
 }
 
 extension CGColor {
     static let reds    = [UIColor.tangerine.cgColor, UIColor.tomato.cgColor]
     static let blues   = [UIColor.bluejay.cgColor, UIColor.blueberry.cgColor]
-    static let greens  = [UIColor.grass.cgColor, UIColor.lime.cgColor]
+    static let greens  = [UIColor.green.cgColor, UIColor.spring.cgColor]//[UIColor.grass.cgColor, UIColor.lime.cgColor]
+    static let golds   = [UIColor.lemon.cgColor, UIColor.gold.cgColor]
     static let purples = [UIColor.indigo.cgColor, UIColor.plum.cgColor]
 }

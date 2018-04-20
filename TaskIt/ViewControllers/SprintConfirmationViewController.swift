@@ -12,6 +12,16 @@ class SprintConfirmationViewController: UIViewController {
     }
 
     var viewModel: ViewModel!
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.title = "Week \(viewModel.weekNumber)"
+    }
+
+    @IBAction func startSprintButtonTapped(_ sender: Any) {
+        viewModel.confirmSprint()
+        navigationController?.popToRootViewController(animated: true)
+    }
 }
 
 extension SprintConfirmationViewController: UITableViewDelegate,
@@ -43,6 +53,7 @@ extension SprintConfirmationViewController {
         private let realm: DatabaseProxy
 
         var prioritizedTasks = [Task]()
+        var weekNumber: Int { return project.sprints.count + 1 }
 
         var numberOfSections: Int { return 1 }
         var numberOfRows: Int { return prioritizedTasks.count }
@@ -56,6 +67,14 @@ extension SprintConfirmationViewController {
             self.unstartedTasks = project.tasks
                 .filter { $0.state != .finished }
             setUpTaskList()
+        }
+
+        func confirmSprint() {
+            let sprint = Sprint()
+            sprint.tasks.append(objectsIn: prioritizedTasks)
+            realm.write {
+                project.sprints.append(sprint)
+            }
         }
 
         private func setUpTaskList() {

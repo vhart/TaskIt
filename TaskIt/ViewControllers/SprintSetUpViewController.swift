@@ -13,24 +13,22 @@ class SprintSetUpViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var taskItButton: UIButton!
     @IBOutlet weak var picker: UIPickerView!
-
-    lazy var editButton: UIBarButtonItem = {
-        let edit = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTapped))
-        return edit
-    }()
-
-    lazy var doneButton: UIBarButtonItem = {
-        let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
-        return done
-    }()
+    @IBOutlet weak var editingButton: UIButton!
+    @IBOutlet weak var doneButton: UIButton!
 
     var viewModel: ViewModel!
 
     private let disposeBag = DisposeBag()
     private var batchUpdates = [TableViewUpdates]()
 
+    lazy var addButton: UIBarButtonItem = {
+        let add = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createTask))
+        return add
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.estimatedSectionHeaderHeight = 50.0
         bindUiToViewModel()
         viewModel.view(.didLoad)
     }
@@ -38,8 +36,10 @@ class SprintSetUpViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.view(.willAppear)
+        navigationItem.rightBarButtonItem = addButton
         tableView.isEditing = false
-        navigationItem.rightBarButtonItem = editButton
+        editingButton.isHidden = false
+        doneButton.isHidden = true
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -58,45 +58,24 @@ class SprintSetUpViewController: UIViewController {
         viewModel.view(.didDisappear)
     }
 
-    @objc private func editButtonTapped() {
-        navigationItem.rightBarButtonItem = nil
-        navigationItem.rightBarButtonItem = doneButton
-
+    @IBAction func editButtonTapped(_ sender: UIButton) {
+        editingButton.isHidden = true
+        doneButton.isHidden = false
         tableView.isEditing = true
     }
 
-    @objc private func doneButtonTapped() {
-        navigationItem.rightBarButtonItem = nil
-        navigationItem.rightBarButtonItem = editButton
-
+    @IBAction func doneButtonTapped(_ sender: Any) {
+        doneButton.isHidden = true
+        editingButton.isHidden = false
         tableView.isEditing = false
     }
 
     private func bindUiToViewModel() {
         viewModel.tableViewUpdates
-            .observeOn(MainScheduler.instance)
+            .observeOn(MainScheduler.asyncInstance)
             .subscribeNext { [weak self] updates in
-                let reloads = updates.flatMap { update in
-                    return update.reloads.map {
-                        IndexPath(row: $0, section: update.section)
-                    }
-                }
-                let deletions = updates.flatMap { update in
-                    return update.deletions.map {
-                        IndexPath(row: $0, section: update.section)
-                    }
-                }
-                let insertions = updates.flatMap { update in
-                    return update.inserts.map {
-                        IndexPath(row: $0, section: update.section)
-                    }
-                }
+                self?.tableView.performBatchUpdates(with: updates, completion: nil)
 
-                self?.tableView.performBatchUpdates({
-                    self?.tableView.deleteRows(at: deletions, with: .fade)
-                    self?.tableView.insertRows(at: insertions, with: .automatic)
-                    self?.tableView.reloadRows(at: reloads, with: .automatic)
-                }, completion: nil)
         }.disposed(by: disposeBag)
 
         viewModel.taskItButtonEnabled
@@ -117,12 +96,6 @@ class SprintSetUpViewController: UIViewController {
                 else { fatalError() }
             viewModel.watchForUpdates(taskPath: indexPath)
             vc.mode = .update(task)
-        case "CreateTaskSegue":
-            let vc = segue.destination as! TaskUpdateViewController
-            vc.mode = .create
-            vc.onComplete = { [weak self] task in
-                self?.viewModel.insert(newTask: task)
-            }
         default: break
         }
     }
@@ -131,6 +104,15 @@ class SprintSetUpViewController: UIViewController {
         guard let maxTime = viewModel.hoursSelectedInMinutes else { return }
         let vc = SprintConfirmationViewController.fromStoryboard(with: viewModel.project, maxTime: maxTime)
         navigationController?.pushViewController(vc, animated: true)
+    }
+
+    @objc private func createTask() {
+        let vc = TaskUpdateViewController.fromStoryboard(withMode: .create)
+        vc.onComplete = {
+            [weak self] task in
+            self?.viewModel.insert(newTask: task)
+        }
+        present(vc, animated: true, completion: nil)
     }
 }
 
@@ -207,15 +189,11 @@ UITableViewDataSource {
         return false
     }
 
-    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == 1 { return false }
-        return true
-    }
-
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == 1 { return false }
-        return true
-    }
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let headerType: HeaderType = section == 0 ? .backlog : .finished
+//        let view = TasksHeaderView(type: headerType, frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 100.0))
+//        return view
+//    }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -225,6 +203,7 @@ UITableViewDataSource {
                    moveRowAt sourceIndexPath: IndexPath,
                    to destinationIndexPath: IndexPath) {
         viewModel.moveTask(from: sourceIndexPath, to: destinationIndexPath)
+        viewModel.reload(destinationIndexPath)
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -233,13 +212,6 @@ UITableViewDataSource {
 }
 
 extension SprintSetUpViewController {
-    struct TableViewUpdates {
-        let section: Int
-        let deletions: [Int]
-        let inserts: [Int]
-        let reloads: [Int]
-    }
-
     struct Validation: OptionSet {
         let rawValue: Int
 
@@ -256,8 +228,7 @@ extension SprintSetUpViewController {
         }
 
         private let tableViewUpdatesSubject = PublishSubject<[TableViewUpdates]>()
-        private let unfinishedUpdatesSubject = PublishSubject<TableViewUpdates>()
-        private let finishedUpdatesSubject = PublishSubject<TableViewUpdates>()
+
         private let taskItEnabledSubject = Variable(false)
 
         private var unfinishedTasks: [Task]
@@ -272,20 +243,16 @@ extension SprintSetUpViewController {
 
         let project: Project
 
-        var unfinishedUpdates: Observable<TableViewUpdates> {
-            return unfinishedUpdatesSubject.asObservable()
-        }
-
-        var finishedUpdates: Observable<TableViewUpdates> {
-            return finishedUpdatesSubject.asObservable()
-        }
-
         var tableViewUpdates: Observable<[TableViewUpdates]> {
             return tableViewUpdatesSubject.asObservable()
         }
 
         var taskItButtonEnabled: Observable<Bool> {
             return taskItEnabledSubject.asObservable()
+        }
+
+        var navigationTitle: String {
+            return "Set Up Week \(project.sprints.count + 1)"
         }
 
         init(project: Project, realm: DatabaseProxy = RealmProxy(instance: .main)) {
@@ -350,12 +317,21 @@ extension SprintSetUpViewController {
             }
         }
 
+        func reload(_ path: IndexPath) {
+            let reload = TableViewUpdates(section: path.section,
+                                          deletions: [],
+                                          inserts: [],
+                                          reloads: [path.row])
+            updateTableView(with: [reload])
+        }
+
         func moveTask(from original: IndexPath, to destination: IndexPath) {
             if let task = task(for: original) {
+                updateTask(task: task, movedFrom: original.section, to: destination.section)
                 removeFromDataSource(at: original)
                 addToDataSource(task: task, path: destination)
-
                 moveProjectTask(from: original, to: destination)
+
             }
         }
 
@@ -469,6 +445,22 @@ extension SprintSetUpViewController {
             }
         }
 
+        private func updateTask(task: Task, movedFrom from: Int, to: Int) {
+            guard from >= 0, to >= 0, from != to else { return }
+            var state: TaskState!
+            switch to {
+            case 0: state = .unstarted
+            case 1: state = .finished
+            default: return
+            }
+
+            guard task.state != state else { return }
+
+            realm.write {
+                task.state = state
+            }
+        }
+
         private func updateTableView(with updates: [TableViewUpdates]) {
             guard viewState.value == .didAppear else {
                 delayedUiEvents.append({ [weak self] in
@@ -506,7 +498,7 @@ extension SprintSetUpViewController {
                     project.tasks.move(from: from.row, to: to.row)
                 }
             case (0,1):
-                let offset = unfinishedTasks.count - 1
+                let offset = unfinishedTasks.count
                 realm.write {
                     project.tasks.move(from: from.row, to: offset + to.row)
                 }

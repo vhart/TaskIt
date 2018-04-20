@@ -29,7 +29,6 @@ extension TaskUpdateViewController {
         private let placeHolderVisibilitySubject = Variable<Bool>(false)
         private let hoursSelectionSubject = PublishSubject<HoursSelectionStatus>()
         private let realm: DatabaseProxy
-        //        private let hoursTextSubject = Variable<String>("??.? hrs")
         private let taskStateSubject: Variable<TaskState>
 
         private var validationChecks: TaskCreationValidations = [] {
@@ -105,7 +104,6 @@ extension TaskUpdateViewController {
             }
 
             hoursIndexSubject.value = row
-            endHoursEditing()
         }
 
         func didEditTitle(title: String?) {
