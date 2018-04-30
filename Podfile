@@ -5,7 +5,6 @@ target 'TaskIt' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   pod 'RxSwift',    '~> 4.0'
-  pod 'Cartography', '~> 3.0.1'
   pod 'RealmSwift'
   # Pods for TaskIt
 
