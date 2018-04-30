@@ -229,7 +229,6 @@ class TaskUpdateViewController: UIViewController {
         let leading = hoursTableView.leadingAnchor.constraint(equalTo: hoursButton.leadingAnchor)
         let trailing = hoursTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8)
 
-
         tableViewAnimatableConstraints.constraints[.top] = top
         tableViewAnimatableConstraints.constraints[.bottom] = bottom
         tableViewAnimatableConstraints.constraints[.leading] = leading

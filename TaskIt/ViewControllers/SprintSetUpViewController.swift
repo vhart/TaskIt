@@ -216,7 +216,8 @@ extension SprintSetUpViewController {
         let rawValue: Int
 
         static let validHours = Validation(rawValue: 1 << 0)
-        static let fullyValid: Validation = [.validHours]
+        static let validTasks = Validation(rawValue: 1 << 1)
+        static let fullyValid: Validation = [.validHours, .validTasks]
     }
 
     class ViewModel {
@@ -231,7 +232,15 @@ extension SprintSetUpViewController {
 
         private let taskItEnabledSubject = Variable(false)
 
-        private var unfinishedTasks: [Task]
+        private var unfinishedTasks: [Task] = [] {
+            didSet {
+                if unfinishedTasks.isEmpty {
+                    validations.remove(.validTasks)
+                } else {
+                    validations.insert(.validTasks)
+                }
+            }
+        }
         private var finishedTasks: [Task]
         private var tokensStore = [NotificationToken]()
 
@@ -265,6 +274,8 @@ extension SprintSetUpViewController {
             finishedTasks = project.tasks
                 .filter("state == \(TaskState.finished.rawValue)")
                 .map { $0 }
+
+            if !unfinishedTasks.isEmpty { validations.insert(.validTasks) }
 
             saveInitialSort()
         }

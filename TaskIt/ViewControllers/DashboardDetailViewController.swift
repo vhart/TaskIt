@@ -13,6 +13,7 @@ class DashboardDetailViewController: UIViewController,  UITableViewDelegate, UIT
 
     var viewModel = ViewModel()
     let disposeBag = DisposeBag()
+    var onFinishRequested: ((Project) -> Void)?
 
     lazy var graphView: SprintGraphView = {
         let view = SprintGraphView(unstarted:  viewModel.currentUnstarted,
@@ -81,9 +82,9 @@ class DashboardDetailViewController: UIViewController,  UITableViewDelegate, UIT
     private func bindUiToViewModel() {
         viewModel.overlayOptions
             .distinctUntilChanged()
-            .observeOn(MainScheduler.instance)
+            .observeOn(MainScheduler.asyncInstance)
             .subscribeNext { [weak self] overlayOptions in
-                self?.showOverlay(isVisible: overlayOptions.contains(.setUpNextSprint))
+                self?.showOverlay(options: overlayOptions)
         }.disposed(by: disposeBag)
 
         viewModel.graphUpdates
@@ -125,13 +126,19 @@ class DashboardDetailViewController: UIViewController,  UITableViewDelegate, UIT
         projectNameLabel.text = viewModel.projectName
     }
 
-    private func showOverlay(isVisible: Bool) {
+    private func showOverlay(options: SprintSetUpIndicatorView.SprintOverlayActions) {
+        let isVisible = !options.isEmpty
         sprintSetUpView.viewModel.setHidden(!isVisible)
 
         if isVisible {
+            sprintSetUpView.viewModel.layout(style: options)
             sprintSetUpView.viewModel.setTitle("Set Up Week \(viewModel.weeksExisting + 1)")
-            sprintSetUpView.onButtonTapped = { [weak self] in
+            sprintSetUpView.onSetUpButtonTapped = { [weak self] in
                 self?.showSprintSetUp()
+            }
+            sprintSetUpView.onFinishButtonTapped = { [weak self] in
+                guard let strongSelf = self else { return }
+                strongSelf.onFinishRequested?(strongSelf.viewModel.project)
             }
         }
     }
@@ -248,7 +255,7 @@ extension DashboardDetailViewController {
         private let tableViewUpdatesSubject = PublishSubject<TableViewUpdateType>()
         private let graphUpdatesSubject = Variable<GraphViewUpdate?>(nil)
         private let showFinishOverlay = Variable<Bool>(false)
-        private let overlayOptionsSubject = Variable<OverlayOptions>([])
+        private let overlayOptionsSubject = Variable<SprintSetUpIndicatorView.SprintOverlayActions>([])
         private let weekLabelSubject = Variable<String>("Week")
         private let showAllTasksButtonSubject = Variable<Bool>(false)
 
@@ -272,7 +279,7 @@ extension DashboardDetailViewController {
         var projectName: String { return project.name }
         var shouldShowAllTasksButton: Bool { return project.sprints.count != 0 }
 
-        var overlayOptions: Observable<OverlayOptions> {
+        var overlayOptions: Observable<SprintSetUpIndicatorView.SprintOverlayActions> {
             return overlayOptionsSubject.asObservable()
         }
 
@@ -375,19 +382,19 @@ extension DashboardDetailViewController {
         }
 
         private func updateOverlay(sprint: Sprint?) {
-            var overlayOptions: OverlayOptions = []
+            var overlayOptions: SprintSetUpIndicatorView.SprintOverlayActions = []
             let projectHasUnfinishedTasks = project.tasks.contains(where: { $0.state != .finished })
-            if !projectHasUnfinishedTasks { overlayOptions.insert(.showFinished) }
+            if !projectHasUnfinishedTasks { overlayOptions.insert(.finish) }
 
             guard let sprint = sprint else {
-                overlayOptions.insert(.setUpNextSprint)
+                overlayOptions.insert(.setUp)
                 overlayOptionsSubject.value = overlayOptions
                 return
             }
 
             let timeLeft = sprint.endDate.timeIntervalSinceNow
             if timeLeft <= 0 {
-                overlayOptions.insert(.setUpNextSprint)
+                overlayOptions.insert(.setUp)
             }
 
             if timeLeft > 0 {

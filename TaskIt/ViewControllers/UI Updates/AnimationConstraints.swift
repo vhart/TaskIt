@@ -13,4 +13,14 @@ struct AnimationConstraints {
     }
 
     var constraints = [ConstraintType: NSLayoutConstraint]()
+
+    subscript(type: ConstraintType) -> NSLayoutConstraint? {
+        get {
+            return constraints[type]
+        }
+
+        set(newValue) {
+            constraints[type] = newValue
+        }
+    }
 }

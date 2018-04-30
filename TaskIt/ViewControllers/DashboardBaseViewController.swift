@@ -4,7 +4,9 @@ import RxSwift
 
 class DashboardBaseViewController: UIViewController {
 
-    private var detailViewController: UIViewController?
+    private var embedCoordinator: EmbedCoordinator!
+
+    @IBOutlet weak var addProjectButton: UIButton!
 
     var viewModel = ViewModel()
     let disposeBag = DisposeBag()
@@ -13,11 +15,14 @@ class DashboardBaseViewController: UIViewController {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
+        view.layer.cornerRadius = 5
+        view.layer.masksToBounds = true
         return view
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        embedCoordinator = EmbedCoordinator(base: self)
         setUpDetailContainer()
         bindUiToViewModel()
         viewModel.view(.didLoad)
@@ -35,12 +40,14 @@ class DashboardBaseViewController: UIViewController {
             .subscribeNext { [weak self] showDetail in
                 switch showDetail {
                 case true:
-                    self?.dashDetailContainer.alpha = 1.0
+                    self?.addProjectButton.alpha = 0
+                    self?.dashDetailContainer.alpha = 1
                     self?.embedDetailViewController()
                     self?.view.backgroundColor = .lightGray
                 case false:
-                    self?.dashDetailContainer.alpha = 0.0
-                    self?.removeDetailViewController()
+                    self?.addProjectButton.alpha = 1
+                    self?.dashDetailContainer.alpha = 0
+                    self?.embedCoordinator.removeCurrentEmbeddedViewController()
                     self?.view.backgroundColor = .white
                 }
         }.disposed(by: disposeBag)
@@ -58,31 +65,43 @@ class DashboardBaseViewController: UIViewController {
     }
 
     private func embedDetailViewController() {
-        let child = DashboardDetailViewController.fromStoryboard()
-        child.view.backgroundColor = .white
-        child.view.translatesAutoresizingMaskIntoConstraints = false
-        child.view.layer.cornerRadius = 5
-
-        addChildViewController(child)
-        dashDetailContainer.addSubview(child.view)
-
-        NSLayoutConstraint.activate([
-            child.view.topAnchor.constraint(equalTo: dashDetailContainer.topAnchor),
-            child.view.bottomAnchor.constraint(equalTo: dashDetailContainer.bottomAnchor),
-            child.view.leadingAnchor.constraint(equalTo: dashDetailContainer.leadingAnchor),
-            child.view.trailingAnchor.constraint(equalTo: dashDetailContainer.trailingAnchor)
-            ])
-        child.willMove(toParentViewController: self)
-        child.didMove(toParentViewController: self)
-
-        detailViewController = child
+        let detailVC = DashboardDetailViewController.fromStoryboard()
+        detailVC.onFinishRequested = { [weak self] project in
+            self?.flipToCompletionViewController(project: project)
+        }
+        embedCoordinator.embed(child: detailVC, in: dashDetailContainer)
     }
 
-    private func removeDetailViewController() {
-        detailViewController?.willMove(toParentViewController: nil)
-        detailViewController?.view.removeFromSuperview()
-        detailViewController?.removeFromParentViewController()
-        detailViewController = nil
+    private func embedProjectCompletionViewController(project: Project) {
+        let completionVC = ProjectCompletionViewController.fromStoryboard(project: project)
+        completionVC.onAction = { [weak self] action in
+            switch action {
+            case .cancel:
+                self?.flipToDetailViewController()
+            case .finish: break
+            }
+        }
+        embedCoordinator.embed(child: completionVC, in: dashDetailContainer)
+    }
+
+    private func flipToCompletionViewController(project: Project) {
+        UIView.transition(with: dashDetailContainer,
+                          duration: 0.4,
+                          options: .transitionFlipFromRight,
+                          animations: {
+                            self.embedProjectCompletionViewController(project: project)
+        },
+                          completion: nil)
+    }
+
+    private func flipToDetailViewController() {
+        UIView.transition(with: dashDetailContainer,
+                          duration: 0.4,
+                          options: .transitionFlipFromLeft,
+                          animations: {
+                            self.embedDetailViewController()
+        },
+                          completion: nil)
     }
 }
 

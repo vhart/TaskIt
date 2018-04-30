@@ -1,5 +1,6 @@
 import UIKit
 import RxSwift
+import RealmSwift
 
 class AllTasksManagingViewController: UIViewController {
     var viewModel: ViewModel!
@@ -55,6 +56,20 @@ class AllTasksManagingViewController: UIViewController {
         viewModel.view(.didDisappear)
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let identifier = segue.identifier else { return }
+        switch identifier {
+        case "TaskUpdatingSegue":
+            let vc = segue.destination as! TaskUpdateViewController
+            guard let indexPath = tableView.indexPathForSelectedRow,
+                let task = viewModel.task(for: indexPath)
+                else { fatalError() }
+            viewModel.watchForUpdates(taskPath: indexPath)
+            vc.mode = .update(task)
+        default: break
+        }
+    }
+
     func bindUiToViewModel() {
         viewModel.tableViewUpdates
             .observeOn(MainScheduler.asyncInstance)
@@ -64,10 +79,12 @@ class AllTasksManagingViewController: UIViewController {
     }
 
     @IBAction func addTaskButtonTapped(_ sender: UIButton) {
+        sender.isEnabled = false
         let vc = TaskUpdateViewController.fromStoryboard(withMode: .create)
         vc.onComplete = { [weak self] task in
             self?.viewModel.insert(newTask: task)
         }
+        present(vc, animated: true, completion: { sender.isEnabled = true })
     }
 
     @objc private func editButtonTapped() {
@@ -83,7 +100,6 @@ class AllTasksManagingViewController: UIViewController {
 
         tableView.isEditing = false
     }
-
 }
 
 extension AllTasksManagingViewController: UITableViewDelegate, UITableViewDataSource {
@@ -138,6 +154,10 @@ extension AllTasksManagingViewController: UITableViewDelegate, UITableViewDataSo
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60.0
+    }
+
     func tableView(_ tableView: UITableView,
                    moveRowAt sourceIndexPath: IndexPath,
                    to destinationIndexPath: IndexPath) {
@@ -154,8 +174,9 @@ extension AllTasksManagingViewController {
         private let tableViewUpdatesSubject = PublishSubject<[TableViewUpdates]>()
         private let viewState = Variable<ViewControllerLifeCycle?>(nil)
         private var delayedUpdates = [TableViewUpdates]()
+        private var tokensStore = [NotificationToken]()
 
-        var weekNumber: Int { return project.sprints.count + 1 }
+        var weekNumber: Int { return project.sprints.count }
 
         var currentTasks = [Task]()
         var backloggedTasks = [Task]()
@@ -175,6 +196,8 @@ extension AllTasksManagingViewController {
             setUpTaskLists()
         }
 
+        // MARK: Internal methods
+
         func numberOfRowsInSection(section: Int) -> Int {
             return dataSource(for: section)?.count ?? 0
         }
@@ -187,7 +210,9 @@ extension AllTasksManagingViewController {
             viewState.value = state
 
             switch state {
-            case .didAppear: purgeUpdates()
+            case .didAppear:
+                invalidateTokens()
+                purgeUpdates()
             default: break
             }
         }
@@ -254,6 +279,69 @@ extension AllTasksManagingViewController {
             return dataSource(for: path.section)?[path.row]
         }
 
+        func watchForUpdates(taskPath: IndexPath) {
+            guard let task = task(for: taskPath) else { return }
+            let oldState = task.state
+            let token = task.observe { [weak self] change in
+                DispatchQueue.main.async {
+                    guard let strongSelf = self else { return }
+                    switch change {
+                    case .change(let changes):
+                        let stateChanges = changes.filter({$0.name == "state"})
+                        let reloadCell: () -> Void = {
+                            let reload = TableViewUpdates(section: taskPath.section,
+                                                          deletions: [],
+                                                          inserts: [],
+                                                          reloads: [taskPath.row])
+                            strongSelf.updateTableView(with: [reload])
+                        }
+
+                        guard !stateChanges.isEmpty && taskPath.section != 0 else {
+                            reloadCell()
+                            return
+                        }
+
+                        let change = stateChanges.first
+                        guard let newValue = change?.newValue as? Int,
+                            let newState = TaskState(rawValue: newValue)
+                            else {
+                                reloadCell()
+                                return
+                        }
+
+                        if oldState == newState {
+                            reloadCell()
+                        } else if newState == .finished || oldState == .finished {
+                            let newSection = newState == .finished ? 2 : 1
+                            let newRow = strongSelf.dataSource(for: newSection)!.count
+
+                            strongSelf.moveTask(from: taskPath,
+                                                to: IndexPath(row: newRow, section: newSection))
+
+                            let deletion = TableViewUpdates(section: taskPath.section,
+                                                            deletions: [taskPath.row],
+                                                            inserts: [],
+                                                            reloads: [])
+
+                            let insertion = TableViewUpdates(section: newSection,
+                                                             deletions: [],
+                                                             inserts: [newRow],
+                                                             reloads: [])
+
+                            strongSelf.updateTableView(with: [deletion, insertion])
+                        } else {
+                            reloadCell()
+                        }
+
+                    default: break
+                    }
+                }
+            }
+            tokensStore.append(token)
+        }
+
+        // MARK: Private methods
+
         private func setUpTaskLists() {
             currentTasks = Array(sprint.tasks)
             let currentSet = Set(currentTasks)
@@ -292,7 +380,9 @@ extension AllTasksManagingViewController {
 
         private func updateTask(task: Task, movedFrom from: Int, to: Int) {
             guard from != to else { return }
-            guard !Set([to, from]).isSuperset(of: [0,1]) else { return }
+            let acceptableStates = validStates(forSection: to)
+
+            guard !acceptableStates.contains(task.state) else { return }
 
             var state: TaskState!
             switch to {
@@ -341,6 +431,15 @@ extension AllTasksManagingViewController {
             }
         }
 
+        private func validStates(forSection section: Int) -> [TaskState] {
+            switch section {
+            case 0: return [.unstarted, .inProgress, .finished]
+            case 1: return [.unstarted, .inProgress]
+            case 2: return [.finished]
+            default: fatalError("invalid section")
+            }
+        }
+
         private func updateTableView(with updates: [TableViewUpdates]) {
             guard viewState.value == .didAppear else {
                 delayedUpdates.append(contentsOf: updates)
@@ -353,6 +452,11 @@ extension AllTasksManagingViewController {
         private func purgeUpdates() {
             tableViewUpdatesSubject.onNext(delayedUpdates)
             delayedUpdates = []
+        }
+
+        private func invalidateTokens() {
+            for token in tokensStore { token.invalidate() }
+            tokensStore = []
         }
     }
 }
