@@ -17,6 +17,10 @@ class ProjectCompletionViewController: UIViewController {
 
     @IBOutlet weak var progressGradientView: UIView!
     @IBOutlet weak var cancelButton: UIButton!
+    
+    @IBOutlet weak var statsView: UIView!
+    
+    let stats = StatsView()
 
     lazy var gradient: GradientView = {
         let view = GradientView()
@@ -31,6 +35,7 @@ class ProjectCompletionViewController: UIViewController {
         super.viewDidLoad()
         styleCancelButton()
         setUpGradient()
+        self.statsView.addSubview(stats)
     }
 
     @IBAction func finishButtonTapped(_ sender: UIButton) {
