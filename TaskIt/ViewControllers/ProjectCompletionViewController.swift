@@ -35,7 +35,7 @@ class ProjectCompletionViewController: UIViewController {
         super.viewDidLoad()
         styleCancelButton()
         setUpGradient()
-        self.statsView.addSubview(stats)
+        setupStatsView()
     }
 
     @IBAction func finishButtonTapped(_ sender: UIButton) {
@@ -65,7 +65,18 @@ class ProjectCompletionViewController: UIViewController {
             gradient.leadingAnchor.constraint(equalTo: progressGradientView.leadingAnchor),
             gradient.topAnchor.constraint(equalTo: progressGradientView.topAnchor),
             gradient.trailingAnchor.constraint(equalTo: progressGradientView.trailingAnchor),
-            gradient.bottomAnchor.constraint(equalTo: progressGradientView.bottomAnchor),
+            gradient.bottomAnchor.constraint(equalTo: progressGradientView.bottomAnchor)
+            ])
+    }
+    
+    private func setupStatsView() {
+        statsView.addSubview(stats)
+        stats.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stats.leadingAnchor.constraint(equalTo: statsView.leadingAnchor),
+            stats.topAnchor.constraint(equalTo: statsView.topAnchor),
+            stats.trailingAnchor.constraint(equalTo: statsView.trailingAnchor),
+            stats.bottomAnchor.constraint(equalTo: statsView.bottomAnchor)
             ])
     }
 }

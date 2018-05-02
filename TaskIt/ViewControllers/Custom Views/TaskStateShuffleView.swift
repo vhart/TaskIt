@@ -54,7 +54,7 @@ class ShuffleView: UIView {
         b.backgroundColor = .spring
         b.translatesAutoresizingMaskIntoConstraints = false
         b.imageView?.contentMode = .scaleAspectFit
-        let image = UIImage(named: "check")?.withRenderingMode(.alwaysTemplate)
+        let image = #imageLiteral(resourceName: "check").withRenderingMode(.alwaysTemplate)
         b.imageView?.tintColor = .white
         b.setImage(image, for: .normal)
         b.setImage(image, for: .highlighted)

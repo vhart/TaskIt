@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		02D25E97BD9934614EF4ABB1 /* Pods_TaskItTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8112960551C27925940838C1 /* Pods_TaskItTests.framework */; };
 		082D628B5D47250F5BDB2844 /* Pods_TaskIt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 947C45ACBF3C62356C48F8DA /* Pods_TaskIt.framework */; };
-		817B60332097803B003CAF5F /* ProjectCompletionStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817B60322097803B003CAF5F /* ProjectCompletionStatsView.swift */; };
+		817B60332097803B003CAF5F /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817B60322097803B003CAF5F /* StatsView.swift */; };
 		D51435C4203A3C3E00016DD3 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51435C3203A3C3E00016DD3 /* Task.swift */; };
 		D5185BB2205709B200140395 /* TapRecognizingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5185BB1205709B200140395 /* TapRecognizingView.swift */; };
 		D51D2C3B203B6A6C00AA371C /* RealmFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51D2C3A203B6A6C00AA371C /* RealmFactory.swift */; };
@@ -60,7 +60,7 @@
 /* Begin PBXFileReference section */
 		1BD961BB742161D3DCD537CC /* Pods-TaskIt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskIt.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TaskIt/Pods-TaskIt.debug.xcconfig"; sourceTree = "<group>"; };
 		8112960551C27925940838C1 /* Pods_TaskItTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaskItTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		817B60322097803B003CAF5F /* ProjectCompletionStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCompletionStatsView.swift; sourceTree = "<group>"; };
+		817B60322097803B003CAF5F /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		947C45ACBF3C62356C48F8DA /* Pods_TaskIt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaskIt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC8984AB912EE7EE431B08B6 /* Pods-TaskItTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskItTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TaskItTests/Pods-TaskItTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D51435C3203A3C3E00016DD3 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -204,7 +204,7 @@
 				D5E20E1820681418004ED500 /* HourSelectionTableViewCell.swift */,
 				D5510F4220719ABE00682E62 /* TaskStateShuffleView.swift */,
 				D56443C82086A10B0067DD23 /* TasksHeaderView.swift */,
-				817B60322097803B003CAF5F /* ProjectCompletionStatsView.swift */,
+				817B60322097803B003CAF5F /* StatsView.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -520,7 +520,7 @@
 				D5E20E1920681418004ED500 /* HourSelectionTableViewCell.swift in Sources */,
 				D5E20E172068045B004ED500 /* TaskUpdateViewController.swift in Sources */,
 				D51435C4203A3C3E00016DD3 /* Task.swift in Sources */,
-				817B60332097803B003CAF5F /* ProjectCompletionStatsView.swift in Sources */,
+				817B60332097803B003CAF5F /* StatsView.swift in Sources */,
 				D51D2C3E203B6D1400AA371C /* Observable+SubscribeNext.swift in Sources */,
 				D5F179052077137B008DE8E8 /* Updates.swift in Sources */,
 				D51D2C4A203BA7E900AA371C /* UIColor+Hex.swift in Sources */,
