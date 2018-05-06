@@ -10,6 +10,12 @@ import UIKit
 
 class StatsView: UIView {
     
+    var viewModel: ViewModel? {
+        didSet {
+            setStatsLabels()
+        }
+    }
+    
     private let oneThird: CGFloat = 1/3
     
     private let imageViewMultiplier: CGFloat = 0.4
@@ -65,8 +71,6 @@ class StatsView: UIView {
     lazy var middleImageView: UIImageView = {
         let photo = UIImageView()
         let image = #imageLiteral(resourceName: "finished-check").withRenderingMode(.alwaysTemplate)
-//        let insets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
-//        let resizedImage = image.resizableImage(withCapInsets: insets)
         photo.image = image
         photo.tintColor = .white
         photo.contentMode = .center
@@ -87,7 +91,6 @@ class StatsView: UIView {
     
     lazy var leftNumberLabel: UILabel = {
         let label = UILabel()
-        label.text = "12"
         label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         label.numberOfLines = 1
         label.textAlignment = .center
@@ -97,7 +100,6 @@ class StatsView: UIView {
     
     lazy var middleNumberLabel: UILabel = {
         let label = UILabel()
-        label.text = "7"
         label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         label.numberOfLines = 1
         label.textAlignment = .center
@@ -107,7 +109,6 @@ class StatsView: UIView {
     
     lazy var rightNumberLabel: UILabel = {
         let label = UILabel()
-        label.text = "56.5"
         label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         label.numberOfLines = 1
         label.textAlignment = .center
@@ -205,8 +206,8 @@ class StatsView: UIView {
         leftContainerView.addSubview(leftImageView)
         NSLayoutConstraint.activate([
             leftImageView.topAnchor.constraint(equalTo: leftContainerView.topAnchor),
-            leftImageView.leadingAnchor.constraint(equalTo: leftContainerView.leadingAnchor),
-            leftImageView.trailingAnchor.constraint(equalTo: leftContainerView.trailingAnchor),
+            leftImageView.leadingAnchor.constraint(greaterThanOrEqualTo: leftContainerView.leadingAnchor),
+            leftImageView.trailingAnchor.constraint(lessThanOrEqualTo: leftContainerView.trailingAnchor),
             leftImageView.widthAnchor.constraint(equalTo: leftView.widthAnchor, multiplier: imageViewMultiplier),
             leftImageView.heightAnchor.constraint(equalTo: leftImageView.widthAnchor, multiplier: 1),
             leftImageView.centerXAnchor.constraint(equalTo: leftContainerView.centerXAnchor)
@@ -219,7 +220,6 @@ class StatsView: UIView {
             leftNumberLabel.topAnchor.constraint(equalTo: leftImageView.bottomAnchor, constant: 10),
             leftNumberLabel.leadingAnchor.constraint(equalTo: leftContainerView.leadingAnchor),
             leftNumberLabel.trailingAnchor.constraint(equalTo: leftContainerView.trailingAnchor),
-            leftNumberLabel.centerXAnchor.constraint(equalTo: leftContainerView.centerXAnchor)
             ])
     }
     
@@ -230,7 +230,6 @@ class StatsView: UIView {
             leftTextLabel.leadingAnchor.constraint(equalTo: leftContainerView.leadingAnchor),
             leftTextLabel.trailingAnchor.constraint(equalTo: leftContainerView.trailingAnchor),
             leftTextLabel.bottomAnchor.constraint(equalTo: leftContainerView.bottomAnchor),
-            leftTextLabel.centerXAnchor.constraint(equalTo: leftContainerView.centerXAnchor)
             ])
     }
     
@@ -270,7 +269,6 @@ class StatsView: UIView {
             middleNumberLabel.topAnchor.constraint(equalTo: middleImageView.bottomAnchor, constant: 10),
             middleNumberLabel.leadingAnchor.constraint(equalTo: middleContainerView.leadingAnchor),
             middleNumberLabel.trailingAnchor.constraint(equalTo: middleContainerView.trailingAnchor),
-            middleNumberLabel.centerXAnchor.constraint(equalTo: middleImageView.centerXAnchor)
             ])
     }
     
@@ -281,7 +279,6 @@ class StatsView: UIView {
             middleTextLabel.leadingAnchor.constraint(equalTo: middleContainerView.leadingAnchor),
             middleTextLabel.trailingAnchor.constraint(equalTo: middleContainerView.trailingAnchor),
             middleTextLabel.bottomAnchor.constraint(equalTo: middleContainerView.bottomAnchor),
-            middleTextLabel.centerXAnchor.constraint(equalTo: middleContainerView.centerXAnchor)
             ])
     }
     
@@ -322,7 +319,6 @@ class StatsView: UIView {
             rightNumberLabel.topAnchor.constraint(equalTo: rightImageView.bottomAnchor, constant: 10),
             rightNumberLabel.leadingAnchor.constraint(equalTo: rightContainerView.leadingAnchor),
             rightNumberLabel.trailingAnchor.constraint(equalTo: rightContainerView.trailingAnchor),
-            rightNumberLabel.centerXAnchor.constraint(equalTo: rightContainerView.centerXAnchor)
             ])
     }
     
@@ -333,9 +329,36 @@ class StatsView: UIView {
             rightTextLabel.leadingAnchor.constraint(equalTo: rightContainerView.leadingAnchor),
             rightTextLabel.trailingAnchor.constraint(equalTo: rightContainerView.trailingAnchor),
             rightTextLabel.bottomAnchor.constraint(equalTo: rightContainerView.bottomAnchor),
-            rightTextLabel.centerXAnchor.constraint(equalTo: rightContainerView.centerXAnchor)
             ])
     }
     
+    private func setStatsLabels() {
+        leftNumberLabel.text = viewModel?.numberOfSprints
+        middleNumberLabel.text = viewModel?.numberOfTasks
+        rightNumberLabel.text = viewModel?.numberOfHours
+        
+        leftTextLabel.text = viewModel?.weeksDescription
+        middleTextLabel.text = viewModel?.tasksDescription
+        rightTextLabel.text = viewModel?.hoursDescription
+    }
 }
 
+extension StatsView {
+    struct ViewModel {
+        let numberOfSprints: String
+        let numberOfTasks: String
+        let numberOfHours: String
+        let weeksDescription: String
+        let tasksDescription: String
+        let hoursDescription: String
+        
+        init(numberOfSprints: Int, numberOfTasks: Int, numberOfMinutes: Task.Minute) {
+            self.numberOfSprints = "\(numberOfSprints)"
+            self.numberOfTasks = "\(numberOfTasks)"
+            self.numberOfHours = numberOfMinutes.asHourString
+            self.weeksDescription = numberOfSprints == 1 ? "Week" : "Weeks"
+            self.tasksDescription = numberOfTasks == 1 ? "Task" : "Tasks"
+            self.hoursDescription = Double(numberOfMinutes) / 60 == 1 ? "Hour" : "Hours"
+        }
+    }
+}

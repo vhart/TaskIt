@@ -1,4 +1,5 @@
 import UIKit
+import RealmSwift
 
 class ProjectCompletionViewController: UIViewController {
     enum Action {
@@ -18,9 +19,9 @@ class ProjectCompletionViewController: UIViewController {
     @IBOutlet weak var progressGradientView: UIView!
     @IBOutlet weak var cancelButton: UIButton!
     
-    @IBOutlet weak var statsView: UIView!
+    @IBOutlet weak var statsViewContainer: UIView!
     
-    let stats = StatsView()
+    lazy var stats = StatsView()
 
     lazy var gradient: GradientView = {
         let view = GradientView()
@@ -70,15 +71,18 @@ class ProjectCompletionViewController: UIViewController {
     }
     
     private func setupStatsView() {
-        statsView.addSubview(stats)
+        stats.viewModel = viewModel.getStatsViewModel()
+        statsViewContainer.addSubview(stats)
         stats.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stats.leadingAnchor.constraint(equalTo: statsView.leadingAnchor),
-            stats.topAnchor.constraint(equalTo: statsView.topAnchor),
-            stats.trailingAnchor.constraint(equalTo: statsView.trailingAnchor),
-            stats.bottomAnchor.constraint(equalTo: statsView.bottomAnchor)
+            stats.leadingAnchor.constraint(equalTo: statsViewContainer.leadingAnchor),
+            stats.topAnchor.constraint(equalTo: statsViewContainer.topAnchor),
+            stats.trailingAnchor.constraint(equalTo: statsViewContainer.trailingAnchor),
+            stats.bottomAnchor.constraint(equalTo: statsViewContainer.bottomAnchor)
             ])
+        
     }
+    
 }
 
 extension ProjectCompletionViewController: UITableViewDelegate, UITableViewDataSource {
@@ -124,6 +128,18 @@ extension ProjectCompletionViewController {
             return TaskTableViewCellViewModel(task: task)
         }
 
+        func getStatsViewModel() -> StatsView.ViewModel {
+            let sprintCount = project.sprints.count
+            let taskCount = project.tasks.count
+            let totalMinutes = project.tasks.reduce(0) { (currentTotal, task) in
+                let newTotal = currentTotal + task.estimatedDuration
+                return newTotal
+            }
+            return StatsView.ViewModel.init(numberOfSprints: sprintCount,
+                                            numberOfTasks: taskCount,
+                                            numberOfMinutes: totalMinutes)
+        }
+        
         func finishProject() {
             database.write {
                 project.state = .finished

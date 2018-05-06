@@ -484,7 +484,7 @@
                     <connections>
                         <outlet property="cancelButton" destination="lu4-ot-qy7" id="9Zp-RW-h6U"/>
                         <outlet property="progressGradientView" destination="ntN-ep-UGa" id="wsR-iB-maW"/>
-                        <outlet property="statsView" destination="BVb-0T-qdZ" id="hI0-h5-VlC"/>
+                        <outlet property="statsViewContainer" destination="BVb-0T-qdZ" id="NtO-pZ-5zU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FbD-8t-hQN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -929,13 +929,13 @@
                                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rqj-YP-U3F">
                                                 <rect key="frame" x="375" y="0.0" width="375" height="603"/>
                                                 <connections>
-                                                    <segue destination="BYZ-38-t0r" kind="embed" id="it7-9p-epA"/>
+                                                    <segue destination="uxL-vs-qZA" kind="embed" id="eDm-re-ok1"/>
                                                 </connections>
                                             </containerView>
                                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Odz-IW-6Rd">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                                 <connections>
-                                                    <segue destination="uxL-vs-qZA" kind="embed" id="hz5-AV-vaS"/>
+                                                    <segue destination="BYZ-38-t0r" kind="embed" id="UDO-IW-FS1"/>
                                                 </connections>
                                             </containerView>
                                         </subviews>
@@ -1147,7 +1147,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Hst-p1-hRk">
-                                <rect key="frame" x="16" y="44" width="343" height="539"/>
+                                <rect key="frame" x="16" y="44" width="120" height="153"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="D2R-oW-wWu">
@@ -1158,7 +1158,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="YbM-C1-l3s">
-                                        <rect key="frame" x="3" y="0.0" width="337" height="200"/>
+                                        <rect key="frame" x="-108.5" y="0.0" width="337" height="200"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="337" height="200"/>
