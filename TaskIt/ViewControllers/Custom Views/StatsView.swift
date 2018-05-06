@@ -22,21 +22,18 @@ class StatsView: UIView {
     
     lazy var leftView: UIView = {
         let view = UIView()
-//        view.backgroundColor = .red
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     lazy var middleView: UIView = {
         let view = UIView()
-//        view.backgroundColor = .blue
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     lazy var rightView: UIView = {
         let view = UIView()
-//        view.backgroundColor = .green
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -70,11 +67,10 @@ class StatsView: UIView {
     
     lazy var middleImageView: UIImageView = {
         let photo = UIImageView()
-        let image = #imageLiteral(resourceName: "finished-check").withRenderingMode(.alwaysTemplate)
+        let image = #imageLiteral(resourceName: "checked")
         photo.image = image
         photo.tintColor = .white
-        photo.contentMode = .center
-        photo.backgroundColor = .spring
+        photo.contentMode = .scaleAspectFit
         photo.layer.masksToBounds = true
         photo.translatesAutoresizingMaskIntoConstraints = false
         return photo
@@ -82,7 +78,7 @@ class StatsView: UIView {
     
     lazy var rightImageView: UIImageView = {
         let photo = UIImageView()
-        photo.image = #imageLiteral(resourceName: "time")
+        photo.image = #imageLiteral(resourceName: "stopwatch")
         photo.contentMode = .scaleAspectFit
         photo.layer.masksToBounds = true
         photo.translatesAutoresizingMaskIntoConstraints = false
@@ -91,7 +87,7 @@ class StatsView: UIView {
     
     lazy var leftNumberLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        label.font = UIFont(fontName: .avenirNextBold, size: 25)
         label.numberOfLines = 1
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -100,7 +96,7 @@ class StatsView: UIView {
     
     lazy var middleNumberLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        label.font = UIFont(fontName: .avenirNextBold, size: 25)
         label.numberOfLines = 1
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -109,7 +105,7 @@ class StatsView: UIView {
     
     lazy var rightNumberLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        label.font = UIFont(fontName: .avenirNextBold, size: 25)
         label.numberOfLines = 1
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -118,7 +114,7 @@ class StatsView: UIView {
     
     lazy var leftTextLabel: UILabel = {
         let label = UILabel()
-        label.text = "Weeks"
+        label.font = UIFont(fontName: .avenirNextRegular, size: 16)
         label.textColor = .gray
         label.numberOfLines = 1
         label.textAlignment = .center
@@ -128,7 +124,7 @@ class StatsView: UIView {
     
     lazy var middleTextLabel: UILabel = {
         let label = UILabel()
-        label.text = "Tasks"
+        label.font = UIFont(fontName: .avenirNextRegular, size: 16)
         label.textColor = .gray
         label.numberOfLines = 1
         label.textAlignment = .center
@@ -138,7 +134,7 @@ class StatsView: UIView {
     
     lazy var rightTextLabel: UILabel = {
         let label = UILabel()
-        label.text = "Hours"
+        label.font = UIFont(fontName: .avenirNextRegular, size: 16)
         label.textColor = .gray
         label.numberOfLines = 1
         label.textAlignment = .center
@@ -159,11 +155,6 @@ class StatsView: UIView {
     private func commonInit() {
         backgroundColor = .white
         setupViews()
-    }
-    
-    override func layoutSubviews() {
-        let radius = (frame.width / 3) * imageViewMultiplier * 0.5
-        middleImageView.layer.cornerRadius = radius
     }
     
     private func setupViews() {
