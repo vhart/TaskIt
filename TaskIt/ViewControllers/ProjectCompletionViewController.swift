@@ -1,4 +1,5 @@
 import UIKit
+import RealmSwift
 
 class ProjectCompletionViewController: UIViewController {
     enum Action {
@@ -17,6 +18,10 @@ class ProjectCompletionViewController: UIViewController {
 
     @IBOutlet weak var progressGradientView: UIView!
     @IBOutlet weak var cancelButton: UIButton!
+    
+    @IBOutlet weak var statsViewContainer: UIView!
+    
+    lazy var stats = StatsView()
 
     lazy var gradient: GradientView = {
         let view = GradientView()
@@ -31,6 +36,7 @@ class ProjectCompletionViewController: UIViewController {
         super.viewDidLoad()
         styleCancelButton()
         setUpGradient()
+        setupStatsView()
     }
 
     @IBAction func finishButtonTapped(_ sender: UIButton) {
@@ -60,9 +66,23 @@ class ProjectCompletionViewController: UIViewController {
             gradient.leadingAnchor.constraint(equalTo: progressGradientView.leadingAnchor),
             gradient.topAnchor.constraint(equalTo: progressGradientView.topAnchor),
             gradient.trailingAnchor.constraint(equalTo: progressGradientView.trailingAnchor),
-            gradient.bottomAnchor.constraint(equalTo: progressGradientView.bottomAnchor),
+            gradient.bottomAnchor.constraint(equalTo: progressGradientView.bottomAnchor)
             ])
     }
+    
+    private func setupStatsView() {
+        stats.viewModel = viewModel.getStatsViewModel()
+        statsViewContainer.addSubview(stats)
+        stats.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stats.leadingAnchor.constraint(equalTo: statsViewContainer.leadingAnchor),
+            stats.topAnchor.constraint(equalTo: statsViewContainer.topAnchor),
+            stats.trailingAnchor.constraint(equalTo: statsViewContainer.trailingAnchor),
+            stats.bottomAnchor.constraint(equalTo: statsViewContainer.bottomAnchor)
+            ])
+        
+    }
+    
 }
 
 extension ProjectCompletionViewController: UITableViewDelegate, UITableViewDataSource {
@@ -108,6 +128,18 @@ extension ProjectCompletionViewController {
             return TaskTableViewCellViewModel(task: task)
         }
 
+        func getStatsViewModel() -> StatsView.ViewModel {
+            let sprintCount = project.sprints.count
+            let taskCount = project.tasks.count
+            let totalMinutes = project.tasks.reduce(0) { (currentTotal, task) in
+                let newTotal = currentTotal + task.estimatedDuration
+                return newTotal
+            }
+            return StatsView.ViewModel.init(numberOfSprints: sprintCount,
+                                            numberOfTasks: taskCount,
+                                            numberOfMinutes: totalMinutes)
+        }
+        
         func finishProject() {
             database.write {
                 project.state = .finished
