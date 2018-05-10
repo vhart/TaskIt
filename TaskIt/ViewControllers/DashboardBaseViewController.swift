@@ -119,7 +119,7 @@ extension DashboardBaseViewController {
 
         private let showDashDetailSubject = PublishSubject<Bool>()
         var showDashDetail: Observable<Bool> {
-            return showDashDetailSubject.asObservable().distinctUntilChanged()
+            return showDashDetailSubject.asObservable()
         }
 
         init(realm: Realm = RealmFactory.realm()) {
