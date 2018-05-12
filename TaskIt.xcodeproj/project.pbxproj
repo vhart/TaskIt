@@ -47,6 +47,11 @@
 		D5E874A42043925700FEA751 /* ViewControllerLifeCycleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E874A32043925700FEA751 /* ViewControllerLifeCycleState.swift */; };
 		D5F179052077137B008DE8E8 /* Updates.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F179042077137B008DE8E8 /* Updates.swift */; };
 		D5F17907207853B3008DE8E8 /* UITableView+TableViewUpdates.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F17906207853B3008DE8E8 /* UITableView+TableViewUpdates.swift */; };
+		D5FDB57720A6A853001A2C93 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D5FDB57620A6A852001A2C93 /* GoogleService-Info.plist */; };
+		D5FDB57820A6A878001A2C93 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D5FDB57620A6A852001A2C93 /* GoogleService-Info.plist */; };
+		D5FDB57B20A72E39001A2C93 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5FDB57A20A72E39001A2C93 /* Analytics.swift */; };
+		D5FDB57D20A72FC4001A2C93 /* FirebaseAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5FDB57C20A72FC4001A2C93 /* FirebaseAnalytics.swift */; };
+		D5FDB57F20A730DC001A2C93 /* AnalyticsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5FDB57E20A730DC001A2C93 /* AnalyticsStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +111,10 @@
 		D5E874A32043925700FEA751 /* ViewControllerLifeCycleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerLifeCycleState.swift; sourceTree = "<group>"; };
 		D5F179042077137B008DE8E8 /* Updates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Updates.swift; sourceTree = "<group>"; };
 		D5F17906207853B3008DE8E8 /* UITableView+TableViewUpdates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+TableViewUpdates.swift"; sourceTree = "<group>"; };
+		D5FDB57620A6A852001A2C93 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D5FDB57A20A72E39001A2C93 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		D5FDB57C20A72FC4001A2C93 /* FirebaseAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAnalytics.swift; sourceTree = "<group>"; };
+		D5FDB57E20A730DC001A2C93 /* AnalyticsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsStore.swift; sourceTree = "<group>"; };
 		D9E6032FA2599969CAA6330C /* Pods-TaskIt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskIt.release.xcconfig"; path = "Pods/Target Support Files/Pods-TaskIt/Pods-TaskIt.release.xcconfig"; sourceTree = "<group>"; };
 		FA3FEDCE3F47D68D360B4869 /* Pods-TaskItTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskItTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TaskItTests/Pods-TaskItTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -265,6 +274,7 @@
 		D566DE97200C6EF500A8DDA0 /* TaskIt */ = {
 			isa = PBXGroup;
 			children = (
+				D5FDB57920A72DB4001A2C93 /* Analytics */,
 				D51D2C48203BA7C500AA371C /* UI-Extensions */,
 				D51D2C42203B9F6300AA371C /* ViewControllers */,
 				D51D2C3F203B702000AA371C /* DispatchQueue+Extensions */,
@@ -275,6 +285,7 @@
 				D566DE9F200C6EF500A8DDA0 /* Assets.xcassets */,
 				D566DEA1200C6EF500A8DDA0 /* LaunchScreen.storyboard */,
 				D566DEA4200C6EF500A8DDA0 /* Info.plist */,
+				D5FDB57620A6A852001A2C93 /* GoogleService-Info.plist */,
 			);
 			path = TaskIt;
 			sourceTree = "<group>";
@@ -286,6 +297,16 @@
 				D566DEAF200C6EF500A8DDA0 /* Info.plist */,
 			);
 			path = TaskItTests;
+			sourceTree = "<group>";
+		};
+		D5FDB57920A72DB4001A2C93 /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				D5FDB57A20A72E39001A2C93 /* Analytics.swift */,
+				D5FDB57C20A72FC4001A2C93 /* FirebaseAnalytics.swift */,
+				D5FDB57E20A730DC001A2C93 /* AnalyticsStore.swift */,
+			);
+			path = Analytics;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -380,6 +401,7 @@
 				D566DEA3200C6EF500A8DDA0 /* LaunchScreen.storyboard in Resources */,
 				D566DEA0200C6EF500A8DDA0 /* Assets.xcassets in Resources */,
 				D566DE9E200C6EF500A8DDA0 /* Main.storyboard in Resources */,
+				D5FDB57720A6A853001A2C93 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,6 +409,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5FDB57820A6A878001A2C93 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,7 +509,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		92FA028DE50A4F86CE6C9753 /* [CP] Check Pods Manifest.lock */ = {
@@ -504,7 +527,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -522,6 +545,7 @@
 				D5AC2F8F204C64D50063688D /* SprintSetUpIndicatorView.swift in Sources */,
 				D5884B2420731D7E00B5FDF5 /* SprintConfirmationViewController.swift in Sources */,
 				D5E874A42043925700FEA751 /* ViewControllerLifeCycleState.swift in Sources */,
+				D5FDB57B20A72E39001A2C93 /* Analytics.swift in Sources */,
 				817B603D209FC4A5003CAF5F /* UIFont+CustomFonts.swift in Sources */,
 				D51D2C44203B9FA100AA371C /* DashboardDetailViewController.swift in Sources */,
 				D5E20E1920681418004ED500 /* HourSelectionTableViewCell.swift in Sources */,
@@ -531,6 +555,7 @@
 				817B603B209FC12A003CAF5F /* UIImage+Insets.swift in Sources */,
 				D51D2C3E203B6D1400AA371C /* Observable+SubscribeNext.swift in Sources */,
 				D5F179052077137B008DE8E8 /* Updates.swift in Sources */,
+				D5FDB57F20A730DC001A2C93 /* AnalyticsStore.swift in Sources */,
 				D51D2C4A203BA7E900AA371C /* UIColor+Hex.swift in Sources */,
 				D5C5F9A8205EDF31008F16C8 /* SprintSetUpViewController.swift in Sources */,
 				D566DE9B200C6EF500A8DDA0 /* DashboardBaseViewController.swift in Sources */,
@@ -540,6 +565,7 @@
 				D546C3B6209675020011C88A /* GradientView.swift in Sources */,
 				D51D2C41203B705900AA371C /* DispatchQueue+OnMain.swift in Sources */,
 				D5F17907207853B3008DE8E8 /* UITableView+TableViewUpdates.swift in Sources */,
+				D5FDB57D20A72FC4001A2C93 /* FirebaseAnalytics.swift in Sources */,
 				D5510F452071A89900682E62 /* AnimationConstraints.swift in Sources */,
 				D56443C720868C560067DD23 /* AllTasksManagingViewController.swift in Sources */,
 				D51D2C3B203B6A6C00AA371C /* RealmFactory.swift in Sources */,
