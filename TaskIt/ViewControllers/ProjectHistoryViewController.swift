@@ -58,22 +58,32 @@ extension ProjectHistoryViewController {
     enum CollectionViewUpdates {
         case reload
     }
-    
+
     class ViewModel {
+        var projectsNotificationToken: NotificationToken? {
+            willSet {
+                projectsNotificationToken?.invalidate()
+            }
+        }
         var projects = [Project]()
         
         private let database: Realm
         
         init(database: Realm = RealmFactory.get(.main)) {
             self.database = database
+            watchForFinishedProjects()
         }
         
         private func watchForFinishedProjects() {
-            database.objects(Project.self)
+            projectsNotificationToken = database.objects(Project.self)
                 .filter("state == \(ProjectState.finished.rawValue)")
                 .observe { [weak self] (change) in
                     switch change {
-                    case .initial(let projects): self?.projects = projects
+                    case .initial(let projects):
+                        self?.projects = projects.map { $0 }
+                    case .update(let projects, _, _, _):
+                        self?.projects = projects.map { $0 }
+                    case .error: fatalError()
                     }
             }
         }
