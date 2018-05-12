@@ -1,5 +1,12 @@
 import Firebase
 
+/*
+// To see analytics in debug console
+// go to Product>Schemes>Edit
+// check the -FIRAnalyticsDebugEnabled
+// checkbox in the Run section
+*/
+
 class FirebaseAnalyticsTracker: AnalyticsTracker {
     private(set) var isActive = true
 
