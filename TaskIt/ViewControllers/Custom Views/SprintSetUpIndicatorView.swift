@@ -130,7 +130,7 @@ class SprintSetUpIndicatorView: UIView {
 
         layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         layer.cornerRadius = 5
-        backgroundColor = UIColor.fog.withAlphaComponent(0.7)
+        backgroundColor = UIColor.black.withAlphaComponent(0.7)
     }
 
     private func layoutActions(withStyle style: SprintOverlayActions) {
