@@ -93,6 +93,22 @@ class TaskUpdateViewController: UIViewController {
         styleTextView(selected: false)
 
         bindUiToViewModel()
+
+        viewModel.view(.didLoad)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.view(.didAppear)
+        if viewModel.shouldBeginEditingTaskTitle {
+            taskTitleTextField.becomeFirstResponder()
+        }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.view(.willDisappear)
+        view.endEditing(true)
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
