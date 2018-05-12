@@ -1,9 +1,12 @@
-//
-//  AnalyticsStore.swift
-//  TaskIt
-//
-//  Created by Varinda Hart on 5/12/18.
-//  Copyright © 2018 vhart. All rights reserved.
-//
+class AnalyticsStore {
+    static let store = AnalyticsStore()
+    private var tracker: AnalyticsTracker = FirebaseAnalyticsTracker()
 
-import Foundation
+    static func get() -> AnalyticsTracker { return store.tracker }
+}
+
+class Analytics {
+    static func logEvent(_ name: String, parameters: [String: Any]) {
+        AnalyticsStore.get().logEvent(name, parameters: parameters)
+    }
+}

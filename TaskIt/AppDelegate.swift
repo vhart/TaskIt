@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  TaskIt
-//
-//  Created by Varinda Hart on 1/15/18.
-//  Copyright © 2018 vhart. All rights reserved.
-//
-
 import UIKit
 import RealmSwift
 
@@ -24,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //        try! realm.write {
         //            realm.delete(objs)
         //        }
+        AnalyticsStore.get().configure()
 
         return true
     }

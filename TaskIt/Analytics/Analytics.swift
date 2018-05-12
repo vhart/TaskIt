@@ -1,9 +1,6 @@
-//
-//  Analytics.swift
-//  TaskIt
-//
-//  Created by Varinda Hart on 5/12/18.
-//  Copyright © 2018 vhart. All rights reserved.
-//
-
-import Foundation
+protocol AnalyticsTracker {
+    func activate()
+    func deactivate()
+    func configure()
+    func logEvent(_ name: String, parameters: [String: Any])
+}
