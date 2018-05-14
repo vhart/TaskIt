@@ -10,6 +10,9 @@
 		02D25E97BD9934614EF4ABB1 /* Pods_TaskItTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8112960551C27925940838C1 /* Pods_TaskItTests.framework */; };
 		082D628B5D47250F5BDB2844 /* Pods_TaskIt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 947C45ACBF3C62356C48F8DA /* Pods_TaskIt.framework */; };
 		8135D7F620A922F400181CE1 /* LocalNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8135D7F520A922F400181CE1 /* LocalNotificationService.swift */; };
+		8135D7F920A92F8100181CE1 /* HistoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8135D7F720A92F8100181CE1 /* HistoryCollectionViewCell.swift */; };
+		8135D7FA20A92F8100181CE1 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8135D7F820A92F8100181CE1 /* HistoryView.swift */; };
+		8135D7FC20A92F9C00181CE1 /* ProjectHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8135D7FB20A92F9C00181CE1 /* ProjectHistoryViewController.swift */; };
 		817B60332097803B003CAF5F /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817B60322097803B003CAF5F /* StatsView.swift */; };
 		817B603B209FC12A003CAF5F /* UIImage+Insets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817B603A209FC12A003CAF5F /* UIImage+Insets.swift */; };
 		817B603D209FC4A5003CAF5F /* UIFont+CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817B603C209FC4A5003CAF5F /* UIFont+CustomFonts.swift */; };
@@ -69,6 +72,9 @@
 		1BD961BB742161D3DCD537CC /* Pods-TaskIt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskIt.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TaskIt/Pods-TaskIt.debug.xcconfig"; sourceTree = "<group>"; };
 		8112960551C27925940838C1 /* Pods_TaskItTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaskItTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8135D7F520A922F400181CE1 /* LocalNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationService.swift; sourceTree = "<group>"; };
+		8135D7F720A92F8100181CE1 /* HistoryCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		8135D7F820A92F8100181CE1 /* HistoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		8135D7FB20A92F9C00181CE1 /* ProjectHistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectHistoryViewController.swift; sourceTree = "<group>"; };
 		817B60322097803B003CAF5F /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		817B603A209FC12A003CAF5F /* UIImage+Insets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Insets.swift"; sourceTree = "<group>"; };
 		817B603C209FC4A5003CAF5F /* UIFont+CustomFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+CustomFonts.swift"; sourceTree = "<group>"; };
@@ -212,6 +218,7 @@
 				D5884B2320731D7E00B5FDF5 /* SprintConfirmationViewController.swift */,
 				D56443C620868C560067DD23 /* AllTasksManagingViewController.swift */,
 				D546C3B120952BC50011C88A /* ProjectCompletionViewController.swift */,
+				8135D7FB20A92F9C00181CE1 /* ProjectHistoryViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -228,6 +235,8 @@
 				D5510F4220719ABE00682E62 /* TaskStateShuffleView.swift */,
 				D56443C82086A10B0067DD23 /* TasksHeaderView.swift */,
 				817B60322097803B003CAF5F /* StatsView.swift */,
+				8135D7F820A92F8100181CE1 /* HistoryView.swift */,
+				8135D7F720A92F8100181CE1 /* HistoryCollectionViewCell.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -556,6 +565,7 @@
 				D5E874A2203FE79A00FEA751 /* TaskCreationViewController.swift in Sources */,
 				D546C3B220952BC50011C88A /* ProjectCompletionViewController.swift in Sources */,
 				D5AC2F8D204C52540063688D /* ProjectOperations.swift in Sources */,
+				8135D7FC20A92F9C00181CE1 /* ProjectHistoryViewController.swift in Sources */,
 				D5510F4320719ABE00682E62 /* TaskStateShuffleView.swift in Sources */,
 				D5AC2F8F204C64D50063688D /* SprintSetUpIndicatorView.swift in Sources */,
 				D5884B2420731D7E00B5FDF5 /* SprintConfirmationViewController.swift in Sources */,
@@ -569,6 +579,7 @@
 				817B60332097803B003CAF5F /* StatsView.swift in Sources */,
 				817B603B209FC12A003CAF5F /* UIImage+Insets.swift in Sources */,
 				D51D2C3E203B6D1400AA371C /* Observable+SubscribeNext.swift in Sources */,
+				8135D7FA20A92F8100181CE1 /* HistoryView.swift in Sources */,
 				D5F179052077137B008DE8E8 /* Updates.swift in Sources */,
 				D5FDB57F20A730DC001A2C93 /* AnalyticsStore.swift in Sources */,
 				D51D2C4A203BA7E900AA371C /* UIColor+Hex.swift in Sources */,
@@ -581,6 +592,7 @@
 				D51D2C41203B705900AA371C /* DispatchQueue+OnMain.swift in Sources */,
 				D5F17907207853B3008DE8E8 /* UITableView+TableViewUpdates.swift in Sources */,
 				D5FDB57D20A72FC4001A2C93 /* FirebaseAnalytics.swift in Sources */,
+				8135D7F920A92F8100181CE1 /* HistoryCollectionViewCell.swift in Sources */,
 				D5510F452071A89900682E62 /* AnimationConstraints.swift in Sources */,
 				D56443C720868C560067DD23 /* AllTasksManagingViewController.swift in Sources */,
 				D51D2C3B203B6A6C00AA371C /* RealmFactory.swift in Sources */,
