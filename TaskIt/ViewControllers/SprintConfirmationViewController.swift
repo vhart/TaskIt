@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import UserNotifications
 
 class SprintConfirmationViewController: UIViewController {
 
@@ -54,9 +55,11 @@ extension SprintConfirmationViewController {
 
         var prioritizedTasks = [Task]()
         var weekNumber: Int { return project.sprints.count + 1 }
-
+        
         var numberOfSections: Int { return 1 }
         var numberOfRows: Int { return prioritizedTasks.count }
+        
+        let localNotifications = LocalNotifications()
 
         init(project: Project,
              maxTime: Task.Minute,
@@ -68,13 +71,15 @@ extension SprintConfirmationViewController {
                 .filter { $0.state != .finished }
             setUpTaskList()
         }
-
+        
         func confirmSprint() {
             let sprint = Sprint()
             sprint.tasks.append(objectsIn: prioritizedTasks)
             realm.write {
                 project.sprints.append(sprint)
             }
+            
+            localNotifications.addLocalNotification(title: "\(project.name)", body: "Your current sprint has ended. Tap to set up your next sprint!", date: sprint.endDate)
         }
 
         private func setUpTaskList() {
