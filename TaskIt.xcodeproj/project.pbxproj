@@ -15,6 +15,7 @@
 		817B603F20A00D86003CAF5F /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817B603E20A00D86003CAF5F /* HistoryView.swift */; };
 		817B604120A00E69003CAF5F /* HistoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817B604020A00E69003CAF5F /* HistoryCollectionViewCell.swift */; };
 		817B605620A29862003CAF5F /* ProjectHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817B605520A29862003CAF5F /* ProjectHistoryViewController.swift */; };
+		817B605920A7D1B7003CAF5F /* LocalNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817B605820A7D1B7003CAF5F /* LocalNotificationService.swift */; };
 		D51435C4203A3C3E00016DD3 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51435C3203A3C3E00016DD3 /* Task.swift */; };
 		D5185BB2205709B200140395 /* TapRecognizingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5185BB1205709B200140395 /* TapRecognizingView.swift */; };
 		D51D2C3B203B6A6C00AA371C /* RealmFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51D2C3A203B6A6C00AA371C /* RealmFactory.swift */; };
@@ -71,6 +72,7 @@
 		817B603E20A00D86003CAF5F /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		817B604020A00E69003CAF5F /* HistoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		817B605520A29862003CAF5F /* ProjectHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectHistoryViewController.swift; sourceTree = "<group>"; };
+		817B605820A7D1B7003CAF5F /* LocalNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationService.swift; sourceTree = "<group>"; };
 		947C45ACBF3C62356C48F8DA /* Pods_TaskIt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaskIt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC8984AB912EE7EE431B08B6 /* Pods-TaskItTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskItTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TaskItTests/Pods-TaskItTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D51435C3203A3C3E00016DD3 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -154,6 +156,14 @@
 				8112960551C27925940838C1 /* Pods_TaskItTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		817B605720A7D177003CAF5F /* Local Notification Service */ = {
+			isa = PBXGroup;
+			children = (
+				817B605820A7D1B7003CAF5F /* LocalNotificationService.swift */,
+			);
+			path = "Local Notification Service";
 			sourceTree = "<group>";
 		};
 		D51435C2203A3C1F00016DD3 /* Database */ = {
@@ -274,6 +284,7 @@
 		D566DE97200C6EF500A8DDA0 /* TaskIt */ = {
 			isa = PBXGroup;
 			children = (
+				817B605720A7D177003CAF5F /* Local Notification Service */,
 				D51D2C48203BA7C500AA371C /* UI-Extensions */,
 				D51D2C42203B9F6300AA371C /* ViewControllers */,
 				D51D2C3F203B702000AA371C /* DispatchQueue+Extensions */,
@@ -555,6 +566,7 @@
 				D5510F452071A89900682E62 /* AnimationConstraints.swift in Sources */,
 				D56443C720868C560067DD23 /* AllTasksManagingViewController.swift in Sources */,
 				D51D2C3B203B6A6C00AA371C /* RealmFactory.swift in Sources */,
+				817B605920A7D1B7003CAF5F /* LocalNotificationService.swift in Sources */,
 				D5E874A0203FB99C00FEA751 /* TaskTableViewCell.swift in Sources */,
 				D566DE99200C6EF500A8DDA0 /* AppDelegate.swift in Sources */,
 				D51D2C47203BA78B00AA371C /* GraphView.swift in Sources */,

@@ -68,14 +68,14 @@ extension ProjectHistoryViewController {
             self.database = database
         }
         
-        private func watchForFinishedProjects() {
-            database.objects(Project.self)
-                .filter("state == \(ProjectState.finished.rawValue)")
-                .observe { [weak self] (change) in
-                    switch change {
-                    case .initial(let projects): self?.projects = projects
-                    }
-            }
-        }
+//        private func watchForFinishedProjects() {
+//            database.objects(Project.self)
+//                .filter("state == \(ProjectState.finished.rawValue)")
+//                .observe { [weak self] (change) in
+//                    switch change {
+//                    case .initial(let projects): self?.projects = projects
+//                    }
+//            }
+//        }
     }
 }
