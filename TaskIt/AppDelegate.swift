@@ -1,36 +1,23 @@
-//
-//  AppDelegate.swift
-//  TaskIt
-//
-//  Created by Varinda Hart on 1/15/18.
-//  Copyright © 2018 vhart. All rights reserved.
-//
-
 import UIKit
 import RealmSwift
-import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        UNUserNotificationCenter.current().delegate = self
-        
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound],  completionHandler: { (granted, error) in
-            print("notifications permissions granted: \(granted)")
-        })
-        
+
         // TODO: Remove deletion code
         //        let realm = RealmFactory.get(.main)
         //        let objs = realm.objects(Project.self)
         //        try! realm.write {
         //            realm.delete(objs)
         //        }
-        
+        AnalyticsStore.get().configure()
+
         return true
     }
 
@@ -59,10 +46,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
 }
 
-extension AppDelegate {
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        
-        completionHandler([.alert])
-    }
-}

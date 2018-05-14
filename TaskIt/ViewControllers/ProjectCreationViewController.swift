@@ -32,6 +32,7 @@ class ProjectCreationViewController: UIViewController {
         projectNameTextField.delegate = self
 
         bindUiToViewModel()
+        viewModel.view(.didLoad)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -39,11 +40,15 @@ class ProjectCreationViewController: UIViewController {
         if let indexPath = tableView.indexPathForSelectedRow {
             tableView.deselectRow(at: indexPath, animated: true)
         }
+        viewModel.view(.willAppear)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         viewModel.view(.didAppear)
+        if viewModel.shouldBeginEditingTitle {
+            projectNameTextField.becomeFirstResponder()
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -226,6 +231,7 @@ extension ProjectCreationViewController {
         private let editingSubject = Variable<Bool>(false)
         private let showEditingSubject = Variable<Bool>(false)
         private let finishEnabledSubject = Variable<Bool>(false)
+        private(set) var shouldBeginEditingTitle = false
         private var shouldDelayUIUpdates = false {
             didSet {
                 if !shouldDelayUIUpdates {
@@ -278,8 +284,13 @@ extension ProjectCreationViewController {
 
         func view(_ state: ViewControllerLifeCycle) {
             switch state {
-            case .didDisappear: shouldDelayUIUpdates = true
-            case .didAppear: shouldDelayUIUpdates = false
+            case .didLoad:
+                shouldBeginEditingTitle = true
+            case .didDisappear:
+                shouldBeginEditingTitle = false
+                shouldDelayUIUpdates = true
+            case .didAppear:
+                shouldDelayUIUpdates = false
             default: break
             }
         }

@@ -31,6 +31,8 @@ extension TaskUpdateViewController {
         private let realm: DatabaseProxy
         private let taskStateSubject: Variable<TaskState>
 
+        private(set) var shouldBeginEditingTaskTitle = false
+
         private var validationChecks: TaskCreationValidations = [] {
             didSet {
                 completionEnabledSubject.value = validationChecks.contains(.fullyValid)
@@ -92,6 +94,20 @@ extension TaskUpdateViewController {
                 completionEnabledSubject.value = true
             }
             watchDetailSubject()
+        }
+
+        func view(_ state: ViewControllerLifeCycle) {
+            switch state {
+            case .didLoad:
+                if let title = titleSubject.value {
+                    shouldBeginEditingTaskTitle = title.isEmpty
+                } else {
+                    shouldBeginEditingTaskTitle = true
+                }
+            case .willDisappear:
+                shouldBeginEditingTaskTitle = false
+            default: break
+            }
         }
 
         func didSelect(row: Int) {

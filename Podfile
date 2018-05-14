@@ -6,6 +6,7 @@ target 'TaskIt' do
   use_frameworks!
   pod 'RxSwift',    '~> 4.0'
   pod 'RealmSwift'
+  pod 'Firebase/Core'
   # Pods for TaskIt
 
   target 'TaskItTests' do
