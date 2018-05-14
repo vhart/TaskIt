@@ -3,29 +3,64 @@ import RealmSwift
 import RxSwift
 
 class ProjectHistoryViewController: UIViewController {
+    private let disposeBag = DisposeBag()
 
-    private let historyView = ProjectHistoryView()
+    private let viewModel = ViewModel()
     
     private let cellSpacing: CGFloat = 8
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.addSubview(historyView)
-        historyView.historyCollectionView.delegate = self
-        historyView.historyCollectionView.dataSource = self
-        
+        setupHistoryView()
+        historyCollectionView.delegate = self
+        historyCollectionView.dataSource = self
+        bindUiToViewModel()
+    }
+    
+    let cell = "Project History Cell"
+    
+    lazy var historyCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = UIColor.fog
+        collectionView.register(HistoryCollectionViewCell.self, forCellWithReuseIdentifier: cell)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        return collectionView
+    }()
+    
+    private func setupHistoryView() {
+        view.addSubview(historyCollectionView)
+        NSLayoutConstraint.activate([
+            historyCollectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            historyCollectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            historyCollectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            historyCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            historyCollectionView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+            ])
+    }
+    
+    private func bindUiToViewModel() {
+        viewModel.collectionViewUpdates
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribeNext { [weak self] update in
+                switch update {
+                case .reload:
+                    self?.historyCollectionView.reloadData()
+                }
+        }.disposed(by: disposeBag)
     }
 
 }
 
 extension ProjectHistoryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20 // something like completedProjects.count
+        return viewModel.projects.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Project History Cell", for: indexPath)
-        cell.backgroundColor = .orange
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Project History Cell", for: indexPath) as! HistoryCollectionViewCell
+        cell.viewModel = viewModel.historyCollectionViewCellViewModel(row: indexPath.row)
         return cell
     }
 }
@@ -60,18 +95,37 @@ extension ProjectHistoryViewController {
     }
 
     class ViewModel {
+        private let collectionViewUpdatesSubject = Variable<CollectionViewUpdates>(.reload)
+        var collectionViewUpdates: Observable<CollectionViewUpdates> {
+            return collectionViewUpdatesSubject.asObservable()
+        }
         var projectsNotificationToken: NotificationToken? {
             willSet {
                 projectsNotificationToken?.invalidate()
             }
         }
-        var projects = [Project]()
+        var projects = [Project]() {
+            didSet {
+                collectionViewUpdatesSubject.value = .reload
+            }
+        }
         
         private let database: Realm
         
         init(database: Realm = RealmFactory.get(.main)) {
             self.database = database
             watchForFinishedProjects()
+        }
+        
+        func historyCollectionViewCellViewModel(row: Int) -> HistoryCollectionViewCell.ViewModel {
+            let project = projects[row]
+            let totalMinutes = project.tasks.reduce(0) { (currentTotal, task) in
+                let newTotal = currentTotal + task.estimatedDuration
+                return newTotal
+            }
+            let viewModel = HistoryCollectionViewCell.ViewModel(title: project.name,
+                                                                weeksCount: project.sprints.count, tasksCount: project.tasks.count, totalMinutes: totalMinutes)
+            return viewModel
         }
         
         private func watchForFinishedProjects() {

@@ -20,6 +20,7 @@ class HistoryCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = UIFont(fontName: .avenirNextMedium, size: 20)
         label.backgroundColor = .clear
+        label.textAlignment = .center
         label.numberOfLines = 1
         label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -46,6 +47,8 @@ class HistoryCollectionViewCell: UICollectionViewCell {
         super.init(frame: UIScreen.main.bounds)
         self.layer.masksToBounds = true
         self.layer.cornerRadius = 10
+//        self.layer.borderColor = UIColor.black.cgColor
+//        self.layer.borderWidth = 1
         commonInit()
     }
     
@@ -68,7 +71,7 @@ class HistoryCollectionViewCell: UICollectionViewCell {
     private func setupProjectNameLabel() {
         addSubview(projectNameLabel)
         NSLayoutConstraint.activate([
-            projectNameLabel.topAnchor.constraint(equalTo: topAnchor),
+            projectNameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 4),
             projectNameLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             projectNameLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             projectNameLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
@@ -78,9 +81,9 @@ class HistoryCollectionViewCell: UICollectionViewCell {
     private func setupGradient() {
         addSubview(gradient)
         NSLayoutConstraint.activate([
-            gradient.topAnchor.constraint(equalTo: projectNameLabel.bottomAnchor),
+            gradient.topAnchor.constraint(equalTo: projectNameLabel.bottomAnchor, constant: 4),
             gradient.widthAnchor.constraint(equalTo: widthAnchor),
-            gradient.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.005),
+            gradient.heightAnchor.constraint(equalToConstant: 5),
             gradient.centerXAnchor.constraint(equalTo: centerXAnchor)
             ])
     }
