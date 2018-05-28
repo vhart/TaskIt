@@ -1,5 +1,10 @@
 import RxSwift
 
+enum TaskEditingMode {
+    case create
+    case update(Task)
+}
+
 class TaskUpdateViewController: UIViewController {
 
     static func fromStoryboard(withMode mode: TaskEditingMode) -> TaskUpdateViewController {
@@ -62,7 +67,6 @@ class TaskUpdateViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 16, weight: .light)
-
         return label
     }()
 
@@ -272,7 +276,7 @@ class TaskUpdateViewController: UIViewController {
             shuffleView.topAnchor.constraint(equalTo: taskDetailTextView.bottomAnchor, constant: 16),
             shuffleView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
             stateLabel.centerXAnchor.constraint(equalTo: shuffleView.centerXAnchor),
-            stateLabel.topAnchor.constraint(equalTo: shuffleView.bottomAnchor, constant: -16)
+            stateLabel.topAnchor.constraint(equalTo: shuffleView.bottomAnchor, constant: -8)
             ])
     }
 

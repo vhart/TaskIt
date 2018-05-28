@@ -28,7 +28,13 @@ class SprintSetUpViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.estimatedSectionHeaderHeight = 50.0
+        tableView.register(TasksTableViewSectionHeader.self,
+                           forHeaderFooterViewReuseIdentifier: "Header")
+        tableView.estimatedSectionHeaderHeight = 0
+        tableView.estimatedSectionFooterHeight = 0
+        tableView.estimatedRowHeight = 0
+        picker.tintColor = .red
+
         bindUiToViewModel()
         viewModel.view(.didLoad)
     }
@@ -173,12 +179,17 @@ UITableViewDataSource {
         return [delete]
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0  {
-            return "Remaining"
-        } else {
-            return "Finished"
-        }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "Header") as? TasksTableViewSectionHeader else { return nil }
+
+        let headerType: TasksTableViewSectionHeader.State = section == 0 ? .remaining : .finished
+        view.state = headerType
+
+        return view
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60
     }
 
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
@@ -188,12 +199,6 @@ UITableViewDataSource {
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false
     }
-
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let headerType: HeaderType = section == 0 ? .backlog : .finished
-//        let view = TasksHeaderView(type: headerType, frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 100.0))
-//        return view
-//    }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)

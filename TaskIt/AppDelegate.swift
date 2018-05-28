@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //        try! realm.write {
         //            realm.delete(objs)
         //        }
+        LocalNotifications().requestPermissions()
         AnalyticsStore.get().configure()
 
         return true

@@ -28,7 +28,11 @@ class AllTasksManagingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.estimatedSectionHeaderHeight = 50
+        tableView.register(TasksTableViewSectionHeader.self,
+                           forHeaderFooterViewReuseIdentifier: "Header")
+        tableView.estimatedSectionHeaderHeight = 0
+        tableView.estimatedSectionFooterHeight = 0
+        tableView.estimatedRowHeight = 0
         bindUiToViewModel()
         navigationItem.title = "All Tasks"
         viewModel.view(.didLoad)
@@ -129,17 +133,25 @@ extension AllTasksManagingViewController: UITableViewDelegate, UITableViewDataSo
         return [delete]
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let headerType: HeaderType
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerType: TasksTableViewSectionHeader.State
 
         switch section {
-        case 0: headerType = .sprint(viewModel.weekNumber)
-        case 1: headerType = .backlog
+        case 0: headerType = .currentSprint(viewModel.weekNumber)
+        case 1: headerType = .remaining
         case 2: headerType = .finished
         default: return nil
         }
 
-        return headerType.description
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "Header") as? TasksTableViewSectionHeader
+            else { return nil }
+        view.state = headerType
+
+        return view
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60
     }
 
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {

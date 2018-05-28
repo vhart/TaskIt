@@ -13,6 +13,9 @@ class ShuffleView: UIView {
         case middle
     }
 
+    private let heightRatio: CGFloat = 0.55
+    private let insetRatio: CGFloat = 0.4
+
     private var collapsed = true
     private var ignoreTaps = false
     private var leftMidConstraint: NSLayoutConstraint!
@@ -23,11 +26,13 @@ class ShuffleView: UIView {
     var onSelection: ((Selected) -> Void)?
 
     lazy var middleButton: UIButton = {
-        let b = UIButton()
-        b.backgroundColor = .ocean
+        let b = GradientButton()
+        b.gradientLayer?.setDistribution(.topLeftBottomRight)
+        b.gradientLayer?.colors = CGColor.blues
+//        b.backgroundColor = .ocean
         b.translatesAutoresizingMaskIntoConstraints = false
         b.imageView?.contentMode = .scaleAspectFit
-        let image = UIImage(named: "more")?.withRenderingMode(.alwaysTemplate)
+        let image = UIImage(named: "loading")?.withRenderingMode(.alwaysTemplate)
         b.imageView?.tintColor = .white
         b.setImage(image, for: .normal)
         b.setImage(image, for: .highlighted)
@@ -37,11 +42,13 @@ class ShuffleView: UIView {
     }()
 
     lazy var leftButton: UIButton = {
-        let b = UIButton()
-        b.backgroundColor = .tangerine
+        let b = GradientButton()
+        b.gradientLayer?.setDistribution(.topLeftBottomRight)
+        b.gradientLayer?.colors = CGColor.reds
+//        b.backgroundColor = .tomato
         b.translatesAutoresizingMaskIntoConstraints = false
         b.imageView?.contentMode = .scaleAspectFit
-        let image = UIImage(named: "idle")?.withRenderingMode(.alwaysTemplate)
+        let image = UIImage(named: "rect")?.withRenderingMode(.alwaysTemplate)
         b.imageView?.tintColor = .white
         b.setImage(image, for: .normal)
         b.setImage(image, for: .highlighted)
@@ -50,8 +57,10 @@ class ShuffleView: UIView {
     }()
 
     lazy var rightButton: UIButton = {
-        let b = UIButton()
-        b.backgroundColor = .spring
+        let b = GradientButton()
+        b.gradientLayer?.setDistribution(.topLeftBottomRight)
+        b.gradientLayer?.colors = CGColor.greens
+//        b.backgroundColor = .spring
         b.translatesAutoresizingMaskIntoConstraints = false
         b.imageView?.contentMode = .scaleAspectFit
         let image = #imageLiteral(resourceName: "check").withRenderingMode(.alwaysTemplate)
@@ -87,10 +96,19 @@ class ShuffleView: UIView {
     }
 
     override func layoutSubviews() {
-        let radius = frame.height * 0.55 / 2
+        let radius = frame.height * heightRatio / 2
         middleButton.layer.cornerRadius = radius
         rightButton.layer.cornerRadius = radius
         leftButton.layer.cornerRadius = radius
+
+        let insetAmount = radius * insetRatio
+        let inset = UIEdgeInsets(top: insetAmount,
+                                 left: insetAmount,
+                                 bottom: insetAmount,
+                                 right: insetAmount)
+        middleButton.imageEdgeInsets = inset
+        rightButton.imageEdgeInsets = inset
+        leftButton.imageEdgeInsets = inset
     }
 
     private func setUpViews() {
@@ -105,7 +123,7 @@ class ShuffleView: UIView {
         NSLayoutConstraint.activate([
             middleButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             middleButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            middleButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.55),
+            middleButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: heightRatio),
             middleButton.widthAnchor.constraint(equalTo: middleButton.heightAnchor, multiplier: 1),
             leftMidConstraint,
             leftButton.centerYAnchor.constraint(equalTo: middleButton.centerYAnchor),

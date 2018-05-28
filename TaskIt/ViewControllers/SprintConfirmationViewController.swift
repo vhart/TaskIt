@@ -3,6 +3,7 @@ import UIKit
 import UserNotifications
 
 class SprintConfirmationViewController: UIViewController {
+    @IBOutlet weak var tableView: UITableView!
 
     static func fromStoryboard(with project: Project, maxTime: Task.Minute) -> SprintConfirmationViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -14,9 +15,14 @@ class SprintConfirmationViewController: UIViewController {
 
     var viewModel: ViewModel!
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.register(TasksTableViewSectionHeader.self, forHeaderFooterViewReuseIdentifier: "Header")
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationItem.title = "Week \(viewModel.weekNumber)"
+        navigationItem.title = "Confirm"
     }
 
     @IBAction func startSprintButtonTapped(_ sender: Any) {
@@ -43,6 +49,22 @@ UITableViewDataSource {
         cell.viewModel = TaskTableViewCellViewModel(task: task)
 
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard section == 0,
+            let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "Header") as? TasksTableViewSectionHeader
+            else { return nil }
+        view.state = .currentSprint(viewModel.weekNumber)
+        return view
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
     }
 }
 

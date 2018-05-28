@@ -31,7 +31,8 @@ class HistoryCollectionViewCell: UICollectionViewCell {
         let view = GradientView()
         view.gradientLayer?.startPoint = CGPoint(x: 0, y: 0.5)
         view.gradientLayer?.endPoint = CGPoint(x: 1, y: 0.5)
-        view.gradientLayer?.colors = CGColor.greens
+        let colors: [UIColor] = [.tomato, .spring, .bluejay]
+        view.gradientLayer?.colors = colors.map { $0.cgColor }
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -47,8 +48,6 @@ class HistoryCollectionViewCell: UICollectionViewCell {
         super.init(frame: UIScreen.main.bounds)
         self.layer.masksToBounds = true
         self.layer.cornerRadius = 10
-//        self.layer.borderColor = UIColor.black.cgColor
-//        self.layer.borderWidth = 1
         commonInit()
     }
     
@@ -81,7 +80,7 @@ class HistoryCollectionViewCell: UICollectionViewCell {
     private func setupGradient() {
         addSubview(gradient)
         NSLayoutConstraint.activate([
-            gradient.topAnchor.constraint(equalTo: projectNameLabel.bottomAnchor, constant: 4),
+            gradient.topAnchor.constraint(equalTo: projectNameLabel.bottomAnchor, constant: 8),
             gradient.widthAnchor.constraint(equalTo: widthAnchor),
             gradient.heightAnchor.constraint(equalToConstant: 5),
             gradient.centerXAnchor.constraint(equalTo: centerXAnchor)
@@ -91,10 +90,10 @@ class HistoryCollectionViewCell: UICollectionViewCell {
     private func setupStatsView() {
         addSubview(statsView)
         NSLayoutConstraint.activate([
-            statsView.topAnchor.constraint(equalTo: gradient.bottomAnchor),
+            statsView.topAnchor.constraint(equalTo: gradient.bottomAnchor, constant: 4),
             statsView.leadingAnchor.constraint(equalTo: leadingAnchor),
             statsView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            statsView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            statsView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4),
             statsView.centerXAnchor.constraint(equalTo: centerXAnchor)
             ])
     }

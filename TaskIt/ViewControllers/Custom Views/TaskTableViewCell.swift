@@ -61,7 +61,7 @@ struct TaskTableViewCellViewModel {
 
         switch task.state {
         case .unstarted:
-            self.indicatorColor = .tangerine
+            self.indicatorColor = .tomato
             self.gradient = CGColor.reds
         case .inProgress:
             self.indicatorColor = .ocean

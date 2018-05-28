@@ -31,8 +31,7 @@ class SprintGraphView: UIView {
     lazy var unstartedBar: GradientView = {
         let view = GradientView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.gradientLayer?.startPoint = CGPoint(x: 0, y: 0.5)
-        view.gradientLayer?.endPoint = CGPoint(x: 1, y: 0.5)
+        view.gradientLayer?.setDistribution(.leftRight)
         view.gradientLayer?.colors = CGColor.reds
 
         return view
@@ -41,8 +40,7 @@ class SprintGraphView: UIView {
     lazy var inProgressBar: GradientView = {
         let view = GradientView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.gradientLayer?.startPoint = CGPoint(x: 0, y: 0.5)
-        view.gradientLayer?.endPoint = CGPoint(x: 1, y: 0.5)
+        view.gradientLayer?.setDistribution(.leftRight)
         view.gradientLayer?.colors = CGColor.blues
 
         return view
@@ -51,8 +49,7 @@ class SprintGraphView: UIView {
     lazy var finishedBar: GradientView = {
         let view = GradientView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.gradientLayer?.startPoint = CGPoint(x: 0, y: 0.5)
-        view.gradientLayer?.endPoint = CGPoint(x: 1, y: 0.5)
+        view.gradientLayer?.setDistribution(.leftRight)
         view.gradientLayer?.colors = CGColor.greens
         
         return view

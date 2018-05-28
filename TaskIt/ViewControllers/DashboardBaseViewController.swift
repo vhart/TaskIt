@@ -15,7 +15,7 @@ class DashboardBaseViewController: UIViewController {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
-        view.layer.cornerRadius = 5
+        view.layer.cornerRadius = 10
         view.layer.masksToBounds = true
         return view
     }()
@@ -29,8 +29,7 @@ class DashboardBaseViewController: UIViewController {
     }
 
     @IBAction func addProjectTapped(_ sender: Any) {
-//        let projectCreationVC = ProjectCreationViewController.fromStoryboard()
-//        navigationController?.pushViewController(projectCreationVC, animated: true)
+
     }
 
     private func bindUiToViewModel() {
@@ -43,7 +42,7 @@ class DashboardBaseViewController: UIViewController {
                     self?.addProjectButton.alpha = 0
                     self?.dashDetailContainer.alpha = 1
                     self?.embedDetailViewController()
-                    self?.view.backgroundColor = .lightGray
+                    self?.view.backgroundColor = .fog
                 case false:
                     self?.addProjectButton.alpha = 1
                     self?.dashDetailContainer.alpha = 0
