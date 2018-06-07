@@ -49,7 +49,7 @@ class TasksTableViewSectionHeader: UITableViewHeaderFooterView {
         contentView.addSubview(label)
 
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4),
             imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: 1),

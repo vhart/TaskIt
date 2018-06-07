@@ -26,6 +26,14 @@ class SprintSetUpViewController: UIViewController {
         return add
     }()
 
+    lazy var noTasksView: NoTasksView = {
+        let view = NoTasksView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.descriptionLabel.text = "Tap the '+' button above to add a task!"
+
+        return view
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(TasksTableViewSectionHeader.self,
@@ -33,8 +41,9 @@ class SprintSetUpViewController: UIViewController {
         tableView.estimatedSectionHeaderHeight = 0
         tableView.estimatedSectionFooterHeight = 0
         tableView.estimatedRowHeight = 0
-        picker.tintColor = .red
+        layoutNoTasksView()
 
+        navigationItem.title = "Set Up"
         bindUiToViewModel()
         viewModel.view(.didLoad)
     }
@@ -90,6 +99,15 @@ class SprintSetUpViewController: UIViewController {
                 self?.taskItButton.isEnabled = isEnabled
                 self?.taskItButton.backgroundColor = isEnabled ? .ocean : .fog
         }.disposed(by: disposeBag)
+
+        viewModel.hasTasks
+            .distinctUntilChanged()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribeNext { [weak self] hasTasks in
+                UIView.animate(withDuration: 0.3, animations: {
+                    self?.noTasksView.alpha = hasTasks ? 0 : 1
+                })
+            }.disposed(by: disposeBag)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -120,6 +138,17 @@ class SprintSetUpViewController: UIViewController {
         }
         present(vc, animated: true, completion: nil)
     }
+
+    private func layoutNoTasksView() {
+        view.addSubview(noTasksView)
+        NSLayoutConstraint.activate([
+            noTasksView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+            noTasksView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+            noTasksView.topAnchor.constraint(equalTo: tableView.topAnchor),
+            noTasksView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
+            ])
+    }
+
 }
 
 extension SprintSetUpViewController: UIPickerViewDelegate,
@@ -227,6 +256,7 @@ extension SprintSetUpViewController {
 
     class ViewModel {
         private let viewState = Variable<ViewControllerLifeCycle!>(nil)
+        private let hasTasksSubject = Variable<Bool>(false)
         private var validations: Validation = [] {
             didSet {
                 taskItEnabledSubject.value = validations.contains(.fullyValid)
@@ -265,6 +295,8 @@ extension SprintSetUpViewController {
             return taskItEnabledSubject.asObservable()
         }
 
+        var hasTasks: Observable<Bool> { return hasTasksSubject.asObservable() }
+
         var navigationTitle: String {
             return "Set Up Week \(project.sprints.count + 1)"
         }
@@ -281,6 +313,8 @@ extension SprintSetUpViewController {
                 .map { $0 }
 
             if !unfinishedTasks.isEmpty { validations.insert(.validTasks) }
+
+            updateHasTasksSubject()
 
             saveInitialSort()
         }
@@ -323,6 +357,7 @@ extension SprintSetUpViewController {
                                           inserts: [row],
                                           reloads: [])
             updateTableView(with: [update])
+            updateHasTasksSubject()
         }
 
         func removeTask(index: IndexPath) {
@@ -331,6 +366,7 @@ extension SprintSetUpViewController {
 
                 realm.delete(task)
             }
+            updateHasTasksSubject()
         }
 
         func reload(_ path: IndexPath) {
@@ -435,6 +471,10 @@ extension SprintSetUpViewController {
                 }
             }
             tokensStore.append(token)
+        }
+
+        private func updateHasTasksSubject() {
+            hasTasksSubject.value = !project.tasks.isEmpty
         }
 
         private func dataSource(for section: Int) -> [Task]? {

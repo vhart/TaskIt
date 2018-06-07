@@ -1,9 +1,28 @@
 import UIKit
 
+class PermaColorView: UIView {
+    var color: UIColor = .clear {
+        didSet {
+            backgroundColor = color
+        }
+    }
+
+    override var backgroundColor: UIColor? {
+        set {
+            guard newValue == color else { return }
+            super.backgroundColor = newValue
+        }
+
+        get {
+            return super.backgroundColor
+        }
+    }
+}
+
 class TaskTableViewCell: UITableViewCell {
 
     @IBOutlet weak var stateIndicatorViewWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var stateIndicatorView: UIView!
+    @IBOutlet weak var stateIndicatorView: PermaColorView!
 
     @IBOutlet weak var taskTitleLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
@@ -31,13 +50,15 @@ class TaskTableViewCell: UITableViewCell {
 
     func updateUI() {
         guard let vm = viewModel else { return }
+        selectionStyle = .none
 
         taskTitleLabel.text = vm.title
         taskDescriptionLabel.text = vm.description
         timeLabel.text = vm.time
 
-        stateIndicatorView.backgroundColor = vm.indicatorColor
-//        gradientView.gradientLayer?.colors = vm.gradient
+        stateIndicatorView.color = vm.indicatorColor
+        contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        contentView.layer.cornerRadius = 4
     }
 }
 

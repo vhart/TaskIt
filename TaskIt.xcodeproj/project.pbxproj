@@ -33,7 +33,6 @@
 		D5533B8820B21E07006E5CCC /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5533B8720B21E07006E5CCC /* Project.swift */; };
 		D5533B8A20B21E35006E5CCC /* Sprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5533B8920B21E35006E5CCC /* Sprint.swift */; };
 		D56443C720868C560067DD23 /* AllTasksManagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56443C620868C560067DD23 /* AllTasksManagingViewController.swift */; };
-		D56443C92086A10B0067DD23 /* TasksHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56443C82086A10B0067DD23 /* TasksHeaderView.swift */; };
 		D566DE99200C6EF500A8DDA0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D566DE98200C6EF500A8DDA0 /* AppDelegate.swift */; };
 		D566DE9B200C6EF500A8DDA0 /* DashboardBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D566DE9A200C6EF500A8DDA0 /* DashboardBaseViewController.swift */; };
 		D566DE9E200C6EF500A8DDA0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D566DE9C200C6EF500A8DDA0 /* Main.storyboard */; };
@@ -47,6 +46,8 @@
 		D5AC2F8F204C64D50063688D /* SprintSetUpIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AC2F8E204C64D50063688D /* SprintSetUpIndicatorView.swift */; };
 		D5AF0541203EFDBF009BBF6D /* ProjectCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AF0540203EFDBF009BBF6D /* ProjectCreationViewController.swift */; };
 		D5C5F9A8205EDF31008F16C8 /* SprintSetUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C5F9A7205EDF31008F16C8 /* SprintSetUpViewController.swift */; };
+		D5C63D1620BDE49B0058C05F /* NoTasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C63D1520BDE49B0058C05F /* NoTasksView.swift */; };
+		D5C63D1820BDE9960058C05F /* NSLayoutConstraint+Sugar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C63D1720BDE9960058C05F /* NSLayoutConstraint+Sugar.swift */; };
 		D5E20E172068045B004ED500 /* TaskUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E20E162068045B004ED500 /* TaskUpdateViewController.swift */; };
 		D5E20E1920681418004ED500 /* HourSelectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E20E1820681418004ED500 /* HourSelectionTableViewCell.swift */; };
 		D5E8749E203FA35700FEA751 /* DatabaseProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E8749D203FA35700FEA751 /* DatabaseProxy.swift */; };
@@ -100,7 +101,6 @@
 		D5533B8720B21E07006E5CCC /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
 		D5533B8920B21E35006E5CCC /* Sprint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sprint.swift; sourceTree = "<group>"; };
 		D56443C620868C560067DD23 /* AllTasksManagingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTasksManagingViewController.swift; sourceTree = "<group>"; };
-		D56443C82086A10B0067DD23 /* TasksHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksHeaderView.swift; sourceTree = "<group>"; };
 		D566DE95200C6EF500A8DDA0 /* TaskIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D566DE98200C6EF500A8DDA0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D566DE9A200C6EF500A8DDA0 /* DashboardBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardBaseViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +118,8 @@
 		D5AC2F8E204C64D50063688D /* SprintSetUpIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintSetUpIndicatorView.swift; sourceTree = "<group>"; };
 		D5AF0540203EFDBF009BBF6D /* ProjectCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCreationViewController.swift; sourceTree = "<group>"; };
 		D5C5F9A7205EDF31008F16C8 /* SprintSetUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintSetUpViewController.swift; sourceTree = "<group>"; };
+		D5C63D1520BDE49B0058C05F /* NoTasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoTasksView.swift; sourceTree = "<group>"; };
+		D5C63D1720BDE9960058C05F /* NSLayoutConstraint+Sugar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLayoutConstraint+Sugar.swift"; sourceTree = "<group>"; };
 		D5E20E162068045B004ED500 /* TaskUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskUpdateViewController.swift; sourceTree = "<group>"; };
 		D5E20E1820681418004ED500 /* HourSelectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourSelectionTableViewCell.swift; sourceTree = "<group>"; };
 		D5E8749D203FA35700FEA751 /* DatabaseProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseProxy.swift; sourceTree = "<group>"; };
@@ -241,11 +243,11 @@
 				D5185BB1205709B200140395 /* TapRecognizingView.swift */,
 				D5E20E1820681418004ED500 /* HourSelectionTableViewCell.swift */,
 				D5510F4220719ABE00682E62 /* TaskStateShuffleView.swift */,
-				D56443C82086A10B0067DD23 /* TasksHeaderView.swift */,
 				817B60322097803B003CAF5F /* StatsView.swift */,
 				8135D7F820A92F8100181CE1 /* HistoryView.swift */,
 				8135D7F720A92F8100181CE1 /* HistoryCollectionViewCell.swift */,
 				D56D2DC120BBD5D8007BA5C3 /* TasksTableViewSectionHeader.swift */,
+				D5C63D1520BDE49B0058C05F /* NoTasksView.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -256,6 +258,7 @@
 				D51D2C49203BA7E900AA371C /* UIColor+Hex.swift */,
 				817B603A209FC12A003CAF5F /* UIImage+Insets.swift */,
 				817B603C209FC4A5003CAF5F /* UIFont+CustomFonts.swift */,
+				D5C63D1720BDE9960058C05F /* NSLayoutConstraint+Sugar.swift */,
 			);
 			path = "UI-Extensions";
 			sourceTree = "<group>";
@@ -592,6 +595,7 @@
 				D5F179052077137B008DE8E8 /* Updates.swift in Sources */,
 				D5FDB57F20A730DC001A2C93 /* AnalyticsStore.swift in Sources */,
 				D51D2C4A203BA7E900AA371C /* UIColor+Hex.swift in Sources */,
+				D5C63D1820BDE9960058C05F /* NSLayoutConstraint+Sugar.swift in Sources */,
 				D5C5F9A8205EDF31008F16C8 /* SprintSetUpViewController.swift in Sources */,
 				D5533B8A20B21E35006E5CCC /* Sprint.swift in Sources */,
 				D566DE9B200C6EF500A8DDA0 /* DashboardBaseViewController.swift in Sources */,
@@ -602,6 +606,7 @@
 				D546C3B6209675020011C88A /* GradientView.swift in Sources */,
 				D51D2C41203B705900AA371C /* DispatchQueue+OnMain.swift in Sources */,
 				D5F17907207853B3008DE8E8 /* UITableView+TableViewUpdates.swift in Sources */,
+				D5C63D1620BDE49B0058C05F /* NoTasksView.swift in Sources */,
 				D5FDB57D20A72FC4001A2C93 /* FirebaseAnalytics.swift in Sources */,
 				8135D7F920A92F8100181CE1 /* HistoryCollectionViewCell.swift in Sources */,
 				D5510F452071A89900682E62 /* AnimationConstraints.swift in Sources */,
@@ -612,7 +617,6 @@
 				D566DE99200C6EF500A8DDA0 /* AppDelegate.swift in Sources */,
 				D59D28A920AA82AC0027E435 /* RootViewController.swift in Sources */,
 				D51D2C47203BA78B00AA371C /* GraphView.swift in Sources */,
-				D56443C92086A10B0067DD23 /* TasksHeaderView.swift in Sources */,
 				D5E8749E203FA35700FEA751 /* DatabaseProxy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
