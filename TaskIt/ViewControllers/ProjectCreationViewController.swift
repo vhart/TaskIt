@@ -24,12 +24,21 @@ class ProjectCreationViewController: UIViewController {
         return button
     }()
 
+    lazy var noTasksView: NoTasksView = {
+        let view = NoTasksView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.descriptionLabel.text = "Tap 'Add Task' below to add a task!"
+
+        return view
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel = ViewModel()
         tableView.delegate = self
         tableView.dataSource = self
         projectNameTextField.delegate = self
+        layoutNoTasksView()
 
         bindUiToViewModel()
         viewModel.view(.didLoad)
