@@ -1,5 +1,10 @@
 import RxSwift
 
+enum TaskEditingMode {
+    case create
+    case update(Task)
+}
+
 class TaskUpdateViewController: UIViewController {
 
     static func fromStoryboard(withMode mode: TaskEditingMode) -> TaskUpdateViewController {
@@ -62,7 +67,6 @@ class TaskUpdateViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 16, weight: .light)
-
         return label
     }()
 
@@ -75,6 +79,7 @@ class TaskUpdateViewController: UIViewController {
     @IBOutlet weak var hoursLabel: UILabel!
     @IBOutlet weak var hoursButton: UIButton!
     @IBOutlet weak var titleNavItem: UINavigationItem!
+    @IBOutlet weak var expandingView: CenterExpandingView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -272,7 +277,7 @@ class TaskUpdateViewController: UIViewController {
             shuffleView.topAnchor.constraint(equalTo: taskDetailTextView.bottomAnchor, constant: 16),
             shuffleView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
             stateLabel.centerXAnchor.constraint(equalTo: shuffleView.centerXAnchor),
-            stateLabel.topAnchor.constraint(equalTo: shuffleView.bottomAnchor, constant: -16)
+            stateLabel.topAnchor.constraint(equalTo: shuffleView.bottomAnchor, constant: -8)
             ])
     }
 
@@ -472,14 +477,16 @@ extension TaskUpdateViewController: UITextFieldDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         viewModel.didEditTitle(title: textField.text)
-        textField.layer.borderColor = UIColor.fog.cgColor
-        textField.layer.borderWidth = 1
     }
 
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.layer.borderColor = UIColor.grass.cgColor
-        textField.layer.borderWidth = 2
-        textField.layer.cornerRadius = 5
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        expandingView.open()
+        return true
+    }
+
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        expandingView.close()
+        return true
     }
 }
 

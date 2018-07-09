@@ -18,7 +18,8 @@ class ProjectCompletionViewController: UIViewController {
 
     @IBOutlet weak var progressGradientView: UIView!
     @IBOutlet weak var cancelButton: UIButton!
-    
+    @IBOutlet weak var projectTitleLabel: UILabel!
+
     @IBOutlet weak var statsViewContainer: UIView!
     
     lazy var stats = StatsView()
@@ -37,6 +38,7 @@ class ProjectCompletionViewController: UIViewController {
         styleCancelButton()
         setUpGradient()
         setupStatsView()
+        projectTitleLabel.text = viewModel.projectTitle
     }
 
     @IBAction func finishButtonTapped(_ sender: UIButton) {
@@ -122,6 +124,7 @@ extension ProjectCompletionViewController {
 
         var numberOfSections: Int { return 1 }
         var numberOfRows: Int { return project.tasks.count }
+        var projectTitle: String { return project.name }
 
         func taskCellViewModel(row: Int) -> TaskTableViewCellViewModel {
             let task = project.tasks[row]
@@ -142,7 +145,7 @@ extension ProjectCompletionViewController {
         
         func finishProject() {
             database.write {
-                project.state = .finished
+                project.finishProject()
             }
         }
     }

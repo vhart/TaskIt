@@ -15,6 +15,8 @@ class ProjectCreationViewController: UIViewController {
 
     @IBOutlet weak var projectNameTextField: UITextField!
 
+    @IBOutlet weak var expandingView: CenterExpandingView!
+
     @IBOutlet weak var tableView: UITableView!
 
     @IBOutlet weak var finishButton: UIButton!
@@ -24,12 +26,22 @@ class ProjectCreationViewController: UIViewController {
         return button
     }()
 
+    lazy var noTasksView: NoTasksView = {
+        let view = NoTasksView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.descriptionLabel.text = "Tap 'Add Task' below to add a task!"
+
+        return view
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel = ViewModel()
         tableView.delegate = self
         tableView.dataSource = self
         projectNameTextField.delegate = self
+        hidesBottomBarWhenPushed = true
+        layoutNoTasksView()
 
         bindUiToViewModel()
         viewModel.view(.didLoad)
@@ -88,14 +100,20 @@ class ProjectCreationViewController: UIViewController {
                 }
         }.disposed(by: disposeBag)
 
-        viewModel.showEditingOption
+        viewModel.hasTasks
             .distinctUntilChanged()
-            .observeOn(MainScheduler.instance)
-            .subscribeNext { [weak self] canShowEditing in
-                if canShowEditing {
-                    self?.addEditButton()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribeNext { [weak self] hasTasks in
+                if hasTasks {
+                    UIView.animate(withDuration: 0.3, animations: {
+                        self?.addEditButton()
+                        self?.noTasksView.alpha = 0
+                    })
                 } else {
                     self?.removeEditButton()
+                    UIView.animate(withDuration: 0.3, animations: {
+                        self?.noTasksView.alpha = 1
+                    })
                 }
         }.disposed(by: disposeBag)
 
@@ -143,6 +161,17 @@ class ProjectCreationViewController: UIViewController {
             }
         default: break
         }
+    }
+
+    private func layoutNoTasksView() {
+        view.addSubview(noTasksView)
+
+        NSLayoutConstraint.activate([
+            noTasksView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+            noTasksView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+            noTasksView.topAnchor.constraint(equalTo: tableView.topAnchor),
+            noTasksView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
+            ])
     }
 }
 
@@ -201,14 +230,16 @@ extension ProjectCreationViewController: UITextFieldDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         viewModel.updateProjectName(textField.text)
-        textField.layer.borderColor = UIColor.fog.cgColor
-        textField.layer.borderWidth = 1
     }
 
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.layer.borderColor = UIColor.ocean.cgColor
-        textField.layer.borderWidth = 2
-        textField.layer.cornerRadius = 5
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        expandingView.open()
+        return true
+    }
+
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        expandingView.close()
+        return true
     }
 }
 
@@ -224,7 +255,6 @@ extension ProjectCreationViewController {
     }
 
     class ViewModel: ProjectCreationViewModel {
-        private let numberOfRowsSubject = Variable<Int>(0)
         private var nameSubject = Variable<String?>(nil)
         private let insertSubject = PublishSubject<IndexPath>()
         private let reloadSubject = PublishSubject<IndexPath>()
@@ -239,6 +269,9 @@ extension ProjectCreationViewController {
                 }
             }
         }
+
+        private let hasTasksSubject = Variable<Bool>(false)
+
         private var delayedUIUpdates = [() -> Void]()
         private var validity: ProjectValidity = [] {
             didSet {
@@ -257,6 +290,8 @@ extension ProjectCreationViewController {
             return finishEnabledSubject.asObservable()
         }
 
+        var hasTasks: Observable<Bool> { return hasTasksSubject.asObservable() }
+
         let numberOfSections = 1
         var tasks = [Task]() {
             didSet {
@@ -266,6 +301,8 @@ extension ProjectCreationViewController {
                 } else {
                     validity.insert(.validTaskCount)
                 }
+
+                hasTasksSubject.value = !tasks.isEmpty
             }
         }
 

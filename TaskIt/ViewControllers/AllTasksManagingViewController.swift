@@ -18,6 +18,14 @@ class AllTasksManagingViewController: UIViewController {
         return done
     }()
 
+    lazy var noTasksView: NoTasksView = {
+        let view = NoTasksView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.descriptionLabel.text = "Tap 'Add' below to add a task!"
+        view.alpha = 0
+        return view
+    }()
+
     static func fromStoryBoard(project: Project) -> AllTasksManagingViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AllTasksViewController") as! AllTasksManagingViewController
@@ -28,7 +36,13 @@ class AllTasksManagingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.estimatedSectionHeaderHeight = 50
+        tableView.register(TasksTableViewSectionHeader.self,
+                           forHeaderFooterViewReuseIdentifier: "Header")
+        tableView.estimatedSectionHeaderHeight = 0
+        tableView.estimatedSectionFooterHeight = 0
+        tableView.estimatedRowHeight = 0
+        hidesBottomBarWhenPushed = true
+        layoutNoTasksView()
         bindUiToViewModel()
         navigationItem.title = "All Tasks"
         viewModel.view(.didLoad)
@@ -76,6 +90,15 @@ class AllTasksManagingViewController: UIViewController {
             .subscribeNext { [weak self] updates in
                 self?.tableView.performBatchUpdates(with: updates, completion: nil)
         }.disposed(by: disposeBag)
+
+        viewModel.hasTasks
+            .distinctUntilChanged()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribeNext { [weak self] hasTasks in
+                UIView.animate(withDuration: 0.3, animations: {
+                    self?.noTasksView.alpha = hasTasks ? 0 : 1
+                })
+        }.disposed(by: disposeBag)
     }
 
     @IBAction func addTaskButtonTapped(_ sender: UIButton) {
@@ -99,6 +122,16 @@ class AllTasksManagingViewController: UIViewController {
         navigationItem.rightBarButtonItem = editButton
 
         tableView.isEditing = false
+    }
+
+    private func layoutNoTasksView() {
+        view.addSubview(noTasksView)
+        NSLayoutConstraint.activate([
+            noTasksView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+            noTasksView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+            noTasksView.topAnchor.constraint(equalTo: tableView.topAnchor),
+            noTasksView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
+            ])
     }
 }
 
@@ -129,17 +162,25 @@ extension AllTasksManagingViewController: UITableViewDelegate, UITableViewDataSo
         return [delete]
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let headerType: HeaderType
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerType: TasksTableViewSectionHeader.State
 
         switch section {
-        case 0: headerType = .sprint(viewModel.weekNumber)
-        case 1: headerType = .backlog
+        case 0: headerType = .currentSprint(viewModel.weekNumber)
+        case 1: headerType = .remaining
         case 2: headerType = .finished
         default: return nil
         }
 
-        return headerType.description
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "Header") as? TasksTableViewSectionHeader
+            else { return nil }
+        view.state = headerType
+
+        return view
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60
     }
 
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
@@ -172,6 +213,7 @@ extension AllTasksManagingViewController {
         private let realm: DatabaseProxy
         private let sprint: Sprint
         private let tableViewUpdatesSubject = PublishSubject<[TableViewUpdates]>()
+        private let hasTasksSubject = Variable<Bool>(true)
         private let viewState = Variable<ViewControllerLifeCycle?>(nil)
         private var delayedUpdates = [TableViewUpdates]()
         private var tokensStore = [NotificationToken]()
@@ -181,6 +223,8 @@ extension AllTasksManagingViewController {
         var currentTasks = [Task]()
         var backloggedTasks = [Task]()
         var finishedTasks = [Task]()
+
+        var hasTasks: Observable<Bool> { return hasTasksSubject.asObservable() }
 
         var tableViewUpdates: Observable<[TableViewUpdates]> {
             return tableViewUpdatesSubject.asObservable()
@@ -192,6 +236,7 @@ extension AllTasksManagingViewController {
             self.project = project
             self.realm = realm
             self.sprint = lastSprint
+            hasTasksSubject.value = !project.tasks.isEmpty
 
             setUpTaskLists()
         }
@@ -247,6 +292,7 @@ extension AllTasksManagingViewController {
                                           inserts: [row],
                                           reloads: [])
             updateTableView(with: [update])
+            hasTasksSubject.value = !project.tasks.isEmpty
         }
 
         func removeTask(index: IndexPath) {
@@ -255,6 +301,7 @@ extension AllTasksManagingViewController {
 
                 realm.delete(task)
             }
+            hasTasksSubject.value = !project.tasks.isEmpty
         }
 
         func reload(_ path: IndexPath) {

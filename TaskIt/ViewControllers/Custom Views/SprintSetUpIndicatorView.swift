@@ -60,7 +60,9 @@ class SprintSetUpIndicatorView: UIView {
             .asObservable()
             .observeOn(MainScheduler.instance)
             .subscribeNext { [weak self] (value) in
-                self?.alpha = CGFloat(value)
+                UIView.animate(withDuration: 0.3, animations: {
+                    self?.alpha = CGFloat(value)
+                })
             }.disposed(by: disposeBag)
 
         viewModel.actionStyle

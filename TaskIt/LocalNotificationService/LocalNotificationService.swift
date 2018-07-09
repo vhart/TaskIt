@@ -2,6 +2,10 @@
 import UserNotifications
 
 class LocalNotifications {
+
+    func requestPermissions() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in }
+    }
     
     func addLocalNotification(title: String, body: String, date: Date) {
         let content = UNMutableNotificationContent()

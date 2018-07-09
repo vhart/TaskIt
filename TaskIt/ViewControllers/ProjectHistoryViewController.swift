@@ -8,13 +8,16 @@ class ProjectHistoryViewController: UIViewController {
     private let viewModel = ViewModel()
     
     private let cellSpacing: CGFloat = 8
-    
+    @IBOutlet weak var noHistoryView: UIView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHistoryView()
+        setUpNoHistoryView()
         historyCollectionView.delegate = self
         historyCollectionView.dataSource = self
         bindUiToViewModel()
+        navigationItem.title = "History"
     }
     
     let cell = "Project History Cell"
@@ -23,7 +26,7 @@ class ProjectHistoryViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = UIColor.fog
+        collectionView.backgroundColor = .fog
         collectionView.register(HistoryCollectionViewCell.self, forCellWithReuseIdentifier: cell)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
@@ -39,8 +42,18 @@ class ProjectHistoryViewController: UIViewController {
             historyCollectionView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
             ])
     }
+
+    private func setUpNoHistoryView() {
+        view.bringSubview(toFront: noHistoryView)
+    }
     
     private func bindUiToViewModel() {
+        viewModel.showNoHistory
+            .observeOn(MainScheduler.instance)
+            .subscribeNext { [weak self] showView in
+                self?.noHistoryView.isHidden = !showView
+        }.disposed(by: disposeBag)
+
         viewModel.collectionViewUpdates
             .observeOn(MainScheduler.asyncInstance)
             .subscribeNext { [weak self] update in
@@ -73,7 +86,7 @@ extension ProjectHistoryViewController: UICollectionViewDelegateFlowLayout {
         let screenWidth = UIScreen.main.bounds.width
         let screenHeight = UIScreen.main.bounds.height
         
-        return CGSize(width: (screenWidth - (cellSpacing * numSpaces)) , height: screenHeight * 0.25)
+        return CGSize(width: (screenWidth - (cellSpacing * numSpaces)) , height: screenHeight * 0.30)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -96,6 +109,8 @@ extension ProjectHistoryViewController {
 
     class ViewModel {
         private let collectionViewUpdatesSubject = Variable<CollectionViewUpdates>(.reload)
+        private let showNoHistorySubject = Variable(true)
+
         var collectionViewUpdates: Observable<CollectionViewUpdates> {
             return collectionViewUpdatesSubject.asObservable()
         }
@@ -104,8 +119,12 @@ extension ProjectHistoryViewController {
                 projectsNotificationToken?.invalidate()
             }
         }
+
+        var showNoHistory: Observable<Bool> { return showNoHistorySubject.asObservable() }
+
         var projects = [Project]() {
             didSet {
+                showNoHistorySubject.value = projects.isEmpty
                 collectionViewUpdatesSubject.value = .reload
             }
         }
@@ -132,13 +151,16 @@ extension ProjectHistoryViewController {
             projectsNotificationToken = database.objects(Project.self)
                 .filter("state == \(ProjectState.finished.rawValue)")
                 .observe { [weak self] (change) in
+                    let newProjects: [Project]
                     switch change {
                     case .initial(let projects):
-                        self?.projects = projects.map { $0 }
+                        newProjects = projects.map { $0 }
                     case .update(let projects, _, _, _):
-                        self?.projects = projects.map { $0 }
+                        newProjects = projects.map { $0 }
                     case .error: fatalError()
                     }
+
+                    self?.projects = newProjects.sorted(by: { return $0.endDate! > $1.endDate! })
             }
         }
     }

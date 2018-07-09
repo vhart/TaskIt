@@ -29,7 +29,7 @@ class DashboardDetailViewController: UIViewController,  UITableViewDelegate, UIT
         view.translatesAutoresizingMaskIntoConstraints = false
         view.gradientLayer?.startPoint = CGPoint(x: 0, y: 0.5)
         view.gradientLayer?.endPoint = CGPoint(x: 1, y: 0.5)
-        view.gradientLayer?.colors = CGColor.purples
+        view.gradientLayer?.colors = [UIColor.indigo.cgColor, UIColor.tomato.cgColor]//CGColor.purples 
         return view
     }()
 
@@ -59,7 +59,7 @@ class DashboardDetailViewController: UIViewController,  UITableViewDelegate, UIT
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        tableView.layer.cornerRadius = 5
+        tableView.layer.cornerRadius = 10
         tableView.delegate = self
         tableView.dataSource = self
         layoutGraph()
@@ -67,6 +67,8 @@ class DashboardDetailViewController: UIViewController,  UITableViewDelegate, UIT
         layoutSprintSetUpView()
         layoutAllTasksButton()
         bindUiToViewModel()
+
+        navigationItem.title = "Dashboard"
     }
 
     override func viewWillAppear(_ animated: Bool) {
