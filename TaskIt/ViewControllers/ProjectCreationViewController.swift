@@ -15,6 +15,8 @@ class ProjectCreationViewController: UIViewController {
 
     @IBOutlet weak var projectNameTextField: UITextField!
 
+    @IBOutlet weak var expandingView: CenterExpandingView!
+
     @IBOutlet weak var tableView: UITableView!
 
     @IBOutlet weak var finishButton: UIButton!
@@ -38,6 +40,7 @@ class ProjectCreationViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         projectNameTextField.delegate = self
+        hidesBottomBarWhenPushed = true
         layoutNoTasksView()
 
         bindUiToViewModel()
@@ -227,14 +230,16 @@ extension ProjectCreationViewController: UITextFieldDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         viewModel.updateProjectName(textField.text)
-        textField.layer.borderColor = UIColor.fog.cgColor
-        textField.layer.borderWidth = 1
     }
 
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.layer.borderColor = UIColor.ocean.cgColor
-        textField.layer.borderWidth = 2
-        textField.layer.cornerRadius = 5
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        expandingView.open()
+        return true
+    }
+
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        expandingView.close()
+        return true
     }
 }
 

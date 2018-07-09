@@ -17,6 +17,7 @@ class ProjectHistoryViewController: UIViewController {
         historyCollectionView.delegate = self
         historyCollectionView.dataSource = self
         bindUiToViewModel()
+        navigationItem.title = "History"
     }
     
     let cell = "Project History Cell"

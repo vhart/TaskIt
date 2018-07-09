@@ -41,6 +41,7 @@ class AllTasksManagingViewController: UIViewController {
         tableView.estimatedSectionHeaderHeight = 0
         tableView.estimatedSectionFooterHeight = 0
         tableView.estimatedRowHeight = 0
+        hidesBottomBarWhenPushed = true
         layoutNoTasksView()
         bindUiToViewModel()
         navigationItem.title = "All Tasks"

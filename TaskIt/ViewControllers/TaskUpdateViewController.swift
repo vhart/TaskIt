@@ -79,6 +79,7 @@ class TaskUpdateViewController: UIViewController {
     @IBOutlet weak var hoursLabel: UILabel!
     @IBOutlet weak var hoursButton: UIButton!
     @IBOutlet weak var titleNavItem: UINavigationItem!
+    @IBOutlet weak var expandingView: CenterExpandingView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -476,14 +477,16 @@ extension TaskUpdateViewController: UITextFieldDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         viewModel.didEditTitle(title: textField.text)
-        textField.layer.borderColor = UIColor.fog.cgColor
-        textField.layer.borderWidth = 1
     }
 
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.layer.borderColor = UIColor.grass.cgColor
-        textField.layer.borderWidth = 2
-        textField.layer.cornerRadius = 5
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        expandingView.open()
+        return true
+    }
+
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        expandingView.close()
+        return true
     }
 }
 

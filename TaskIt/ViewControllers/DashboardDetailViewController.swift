@@ -67,6 +67,8 @@ class DashboardDetailViewController: UIViewController,  UITableViewDelegate, UIT
         layoutSprintSetUpView()
         layoutAllTasksButton()
         bindUiToViewModel()
+
+        navigationItem.title = "Dashboard"
     }
 
     override func viewWillAppear(_ animated: Bool) {

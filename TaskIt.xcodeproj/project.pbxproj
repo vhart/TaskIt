@@ -42,6 +42,7 @@
 		D56D2DC220BBD5D8007BA5C3 /* TasksTableViewSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56D2DC120BBD5D8007BA5C3 /* TasksTableViewSectionHeader.swift */; };
 		D5884B2420731D7E00B5FDF5 /* SprintConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5884B2320731D7E00B5FDF5 /* SprintConfirmationViewController.swift */; };
 		D59D28A920AA82AC0027E435 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59D28A820AA82AC0027E435 /* RootViewController.swift */; };
+		D5A0A90720EC19780086116E /* CenterExpandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A0A90620EC19780086116E /* CenterExpandingView.swift */; };
 		D5AC2F8D204C52540063688D /* ProjectOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AC2F8C204C52540063688D /* ProjectOperations.swift */; };
 		D5AC2F8F204C64D50063688D /* SprintSetUpIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AC2F8E204C64D50063688D /* SprintSetUpIndicatorView.swift */; };
 		D5AF0541203EFDBF009BBF6D /* ProjectCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AF0540203EFDBF009BBF6D /* ProjectCreationViewController.swift */; };
@@ -114,6 +115,7 @@
 		D56D2DC120BBD5D8007BA5C3 /* TasksTableViewSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksTableViewSectionHeader.swift; sourceTree = "<group>"; };
 		D5884B2320731D7E00B5FDF5 /* SprintConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintConfirmationViewController.swift; sourceTree = "<group>"; };
 		D59D28A820AA82AC0027E435 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		D5A0A90620EC19780086116E /* CenterExpandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterExpandingView.swift; sourceTree = "<group>"; };
 		D5AC2F8C204C52540063688D /* ProjectOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectOperations.swift; sourceTree = "<group>"; };
 		D5AC2F8E204C64D50063688D /* SprintSetUpIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintSetUpIndicatorView.swift; sourceTree = "<group>"; };
 		D5AF0540203EFDBF009BBF6D /* ProjectCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCreationViewController.swift; sourceTree = "<group>"; };
@@ -248,6 +250,7 @@
 				8135D7F720A92F8100181CE1 /* HistoryCollectionViewCell.swift */,
 				D56D2DC120BBD5D8007BA5C3 /* TasksTableViewSectionHeader.swift */,
 				D5C63D1520BDE49B0058C05F /* NoTasksView.swift */,
+				D5A0A90620EC19780086116E /* CenterExpandingView.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -573,6 +576,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5A0A90720EC19780086116E /* CenterExpandingView.swift in Sources */,
 				D546C3B4209648590011C88A /* EmbedCoordinator.swift in Sources */,
 				D546C3B220952BC50011C88A /* ProjectCompletionViewController.swift in Sources */,
 				D5AC2F8D204C52540063688D /* ProjectOperations.swift in Sources */,

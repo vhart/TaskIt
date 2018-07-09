@@ -42,6 +42,7 @@ class SprintSetUpViewController: UIViewController {
         tableView.estimatedSectionFooterHeight = 0
         tableView.estimatedRowHeight = 0
         layoutNoTasksView()
+        hidesBottomBarWhenPushed = true
 
         navigationItem.title = "Set Up"
         bindUiToViewModel()
